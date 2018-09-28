@@ -19,29 +19,55 @@ public class DaoRepository {
     public DaoRepository() {
     }
 
-    public Long totalOrdersNumber() throws SQLException {
-        ResultSet resultSet = executeQuery("SELECT COUNT(id) FROM order;");
-        return resultSet.getLong("COUNT(id)");
+    public void addNewOrder(OrderEntity orderEntity) throws SQLException {
+        statement = connection.createStatement();
+        statement.executeUpdate("insert into \"ORDER\"(clientId,requestId,name,quantity,price) values('"
+                + orderEntity.getClientId() + "',"
+                + orderEntity.getRequestId() + ",'"
+                + orderEntity.getName() + "',"
+                + orderEntity.getQuantity() + ","
+                + orderEntity.getPrice() + ")");
     }
 
-    public Long totalOrdersNumberByClient(Long clientId) throws SQLException {
-        ResultSet resultSet = executeQuery("SELECT COUNT(id) FROM order WHERE " + String.valueOf(clientId) + ";");
-        return resultSet.getLong("COUNT(id)");
+    public String totalOrdersNumber() throws SQLException {
+        ResultSet resultSet = executeQuery("SELECT COUNT(id) FROM \"ORDER\";");
+        String amount = String.valueOf(0);
+        if (resultSet.next()) {
+            amount = resultSet.getString(1);
+        }
+        return amount;
+    }
+
+    public String totalOrdersNumberByClient(Long clientId) throws SQLException {
+        ResultSet resultSet = executeQuery("SELECT COUNT(id) FROM \"ORDER\" WHERE clientId = " + String.valueOf(clientId) + ";");
+        String amount = String.valueOf(0);
+        if (resultSet.next()) {
+            amount = resultSet.getString(1);
+        }
+        return amount;
     }
 
     public BigDecimal totalOrdersPrice() throws SQLException {
-        ResultSet resultSet = executeQuery("SELECT SUM(price) FROM order;");
-        return resultSet.getBigDecimal("SUM(price)");
+        ResultSet resultSet = executeQuery("SELECT SUM(price) FROM \"ORDER\";");
+        String price = String.valueOf(0);
+        if (resultSet.next()) {
+            price = resultSet.getString(1);
+        }
+        return new BigDecimal(price);
     }
 
     public BigDecimal totalOrdersPriceByClient(Long clientId) throws SQLException {
-        ResultSet resultSet = executeQuery("SELECT SUM(price) FROM order WHERE " + String.valueOf(clientId) + ";");
-        return resultSet.getBigDecimal("SUM(price)");
+        ResultSet resultSet = executeQuery("SELECT SUM(price) FROM \"ORDER\" WHERE clientId = " + String.valueOf(clientId) + ";");
+        String price = String.valueOf(0);
+        if (resultSet.next()) {
+            price = resultSet.getString(1);
+        }
+        return new BigDecimal(price);
     }
 
     public List<OrderEntity> listOfAllOrders() throws SQLException {
         List<OrderEntity> listOfAllOrders = new ArrayList<OrderEntity>();
-        ResultSet resultSet = executeQuery("SELECT * FROM order");
+        ResultSet resultSet = executeQuery("SELECT * FROM \"ORDER\"");
         while (resultSet.next()) {
             listOfAllOrders.add(prepareOrder(resultSet));
         }
@@ -50,7 +76,7 @@ public class DaoRepository {
 
     public List<OrderEntity> listOfAllOrdersToClientById(Long clientId) throws SQLException {
         List<OrderEntity> listOfAllOrdersToClient = new ArrayList<OrderEntity>();
-        ResultSet resultSet = executeQuery("SELECT * FROM order WHERE " + String.valueOf(clientId) + ";");
+        ResultSet resultSet = executeQuery("SELECT * FROM \"ORDER\" WHERE clientId = " + String.valueOf(clientId) + ";");
         while (resultSet.next()) {
             listOfAllOrdersToClient.add(prepareOrder(resultSet));
         }
@@ -58,12 +84,12 @@ public class DaoRepository {
     }
 
     public BigDecimal averageValueOfOrder() throws SQLException {
-        ResultSet resultSet = executeQuery("SELECT AVG(price) FROM order");
+        ResultSet resultSet = executeQuery("SELECT AVG(price) FROM \"ORDER\"");
         return resultSet.getBigDecimal("AVG(price)");
     }
 
     public BigDecimal averageValueOfOrderToClientById(Long clientId) throws SQLException {
-        ResultSet resultSet = executeQuery("SELECT AVG(price) FROM order WHERE " + String.valueOf(clientId) + ";");
+        ResultSet resultSet = executeQuery("SELECT AVG(price) FROM \"ORDER\" WHERE " + String.valueOf(clientId) + ";");
         return resultSet.getBigDecimal("AVG(price)");
     }
 
