@@ -7,9 +7,9 @@ import java.sql.SQLException;
 public class H2JdbcConnection {
 
     static final String JDBC_DRIVER = "org.h2.Driver";
-    static final String DB_URL = "jdbc:h2:~/test";
-    static final String USER = "";
-    static final String PASSWORD = "";
+    static final String DB_URL = "jdbc:h2:./Database/my";
+    static final String USER = "root";
+    static final String PASSWORD = "mypassword";
 
     public H2JdbcConnection() {
     }
