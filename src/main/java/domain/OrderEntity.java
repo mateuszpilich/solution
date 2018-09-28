@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 
 public class OrderEntity implements Serializable {
 
+    private Long id;
     private String clientId;
     private Long requestId;
     private String name;
@@ -14,12 +15,21 @@ public class OrderEntity implements Serializable {
     public OrderEntity() {
     }
 
-    public OrderEntity(String clientId, Long requestId, String name, Integer quantity, BigDecimal price) {
+    public OrderEntity(Long id, String clientId, Long requestId, String name, Integer quantity, BigDecimal price) {
+        this.id = id;
         this.clientId = clientId;
         this.requestId = requestId;
         this.name = name;
         this.quantity = quantity;
         this.price = price;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getClientId() {
