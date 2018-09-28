@@ -32,7 +32,13 @@ public class Report {
     public void listOfAllOrders() throws SQLException {
         List<OrderEntity> orderEntities = daoRepository.listOfAllOrders();
         System.out.println("List of total orders:");
-        orderEntities.forEach(System.out::println);
+        orderEntities.forEach(order ->
+                System.out.println(order.getId() + ","
+                        + order.getClientId() + ","
+                        + order.getRequestId() + ","
+                        + order.getName() + ","
+                        + order.getQuantity() + ","
+                        + order.getPrice()));
     }
 
     public void listOfAllOrdersToClientById(Long clientId) throws SQLException {
