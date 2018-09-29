@@ -2,6 +2,7 @@ package service;
 
 import dao.DaoRepository;
 import domain.OrderEntity;
+import exceptions.ClientNotExistException;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -44,7 +45,13 @@ public class Report {
     public void listOfAllOrdersToClientById(Long clientId) throws SQLException {
         List<OrderEntity> orderEntities = daoRepository.listOfAllOrdersToClientById(clientId);
         System.out.println("List of total orders to client for id: " + clientId + " is:");
-        orderEntities.forEach(System.out::println);
+        orderEntities.forEach(order ->
+                System.out.println(order.getId() + ","
+                        + order.getClientId() + ","
+                        + order.getRequestId() + ","
+                        + order.getName() + ","
+                        + order.getQuantity() + ","
+                        + order.getPrice()));
     }
 
     public void averageValueOfOrder() throws SQLException {
