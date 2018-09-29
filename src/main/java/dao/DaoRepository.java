@@ -53,7 +53,7 @@ public class DaoRepository {
         if (resultSet.next()) {
             price = resultSet.getString(1);
         }
-        return new BigDecimal(price);
+        return new BigDecimal(price).setScale(2, BigDecimal.ROUND_CEILING);
     }
 
     public BigDecimal totalOrdersPriceByClient(Long clientId) throws SQLException {
@@ -62,7 +62,7 @@ public class DaoRepository {
         if (resultSet.next()) {
             price = resultSet.getString(1);
         }
-        return new BigDecimal(price);
+        return new BigDecimal(price).setScale(2, BigDecimal.ROUND_CEILING);
     }
 
     public List<OrderEntity> listOfAllOrders() throws SQLException {
@@ -85,12 +85,20 @@ public class DaoRepository {
 
     public BigDecimal averageValueOfOrder() throws SQLException {
         ResultSet resultSet = executeQuery("SELECT AVG(price) FROM \"ORDER\"");
-        return resultSet.getBigDecimal("AVG(price)");
+        String price = String.valueOf(0);
+        if (resultSet.next()) {
+            price = resultSet.getString(1);
+        }
+        return new BigDecimal(price).setScale(2, BigDecimal.ROUND_CEILING);
     }
 
     public BigDecimal averageValueOfOrderToClientById(Long clientId) throws SQLException {
-        ResultSet resultSet = executeQuery("SELECT AVG(price) FROM \"ORDER\" WHERE " + String.valueOf(clientId) + ";");
-        return resultSet.getBigDecimal("AVG(price)");
+        ResultSet resultSet = executeQuery("SELECT AVG(price) FROM \"ORDER\" WHERE clientId = " + String.valueOf(clientId) + ";");
+        String price = String.valueOf(0);
+        if (resultSet.next()) {
+            price = resultSet.getString(1);
+        }
+        return new BigDecimal(price).setScale(2, BigDecimal.ROUND_CEILING);
     }
 
     private ResultSet executeQuery(String query) throws SQLException {
@@ -105,7 +113,6 @@ public class DaoRepository {
         String name = resultSet.getString("name");
         Integer quantity = resultSet.getInt("quantity");
         BigDecimal price = resultSet.getBigDecimal("price");
-        OrderEntity orderEntity = new OrderEntity(id, clientIdRs, requestId, name, quantity, price);
-        return orderEntity;
+        return new OrderEntity(id, clientIdRs, requestId, name, quantity, price);
     }
 }
