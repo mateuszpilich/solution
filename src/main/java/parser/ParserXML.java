@@ -32,7 +32,7 @@ public class ParserXML {
         return ordersEntities;
     }
 
-    public static String inputStreamToString(InputStream is) throws IOException {
+    private static String inputStreamToString(InputStream is) throws IOException {
         StringBuilder sb = new StringBuilder();
         String line;
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
