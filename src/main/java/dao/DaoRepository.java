@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * DaoRepository class is for querying to database.
+ * The class helps send queries to database.
  */
 public class DaoRepository {
 
