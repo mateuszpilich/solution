@@ -15,9 +15,6 @@ import java.util.stream.Stream;
 
 public class ParserCSV {
 
-    public ParserCSV() {
-    }
-
     public List<OrderEntity> readOrders(String filePath, boolean removeDuplicates) {
         Set<OrderEntity> ordersEntityWithoutDuplicates = new HashSet<OrderEntity>();
         List<OrderEntity> orderEntities = new ArrayList<OrderEntity>();
