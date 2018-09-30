@@ -5,8 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * H2JdbcConnection class is for connection to database.
- * @return connection: connection with database
+ * The class helps connection from database.
  */
 public class H2JdbcConnection {
 
