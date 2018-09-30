@@ -3,6 +3,9 @@ package domain;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+/**
+ * The class helps represents order.
+ */
 public class OrderEntity implements Serializable {
 
     private Long id;
