@@ -1,6 +1,6 @@
 package dao;
 
-import db_settings.H2JdbcConnection;
+import settings.H2JdbcConnection;
 import domain.OrderEntity;
 
 import java.math.BigDecimal;
