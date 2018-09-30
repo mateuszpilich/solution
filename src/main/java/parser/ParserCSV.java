@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 /**
- * Parser csv class if for read data from files csv.
+ * The class helps read data from files csv.
  */
 public class ParserCSV {
 
