@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Parser xml is for read data from files xml.
+ * The class helps read data from files xml.
  */
 public class ParserXML {
 
