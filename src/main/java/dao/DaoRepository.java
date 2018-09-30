@@ -11,13 +11,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * DaoRepository class is for querying to database.
+ */
 public class DaoRepository {
 
     private Connection connection = new H2JdbcConnection().getConnection();
     private Statement statement;
-
-    public DaoRepository() {
-    }
 
     public void addNewOrder(OrderEntity orderEntity) throws SQLException {
         statement = connection.createStatement();
@@ -39,7 +39,8 @@ public class DaoRepository {
     }
 
     public String totalOrdersNumberByClient(Long clientId) throws SQLException {
-        ResultSet resultSet = executeQuery("SELECT COUNT(id) FROM \"ORDER\" WHERE clientId = " + String.valueOf(clientId) + ";");
+        ResultSet resultSet =
+                executeQuery("SELECT COUNT(id) FROM \"ORDER\" WHERE clientId = " + String.valueOf(clientId) + ";");
         String amount = String.valueOf(0);
         if (resultSet.next()) {
             amount = resultSet.getString(1);
@@ -57,7 +58,8 @@ public class DaoRepository {
     }
 
     public BigDecimal totalOrdersPriceByClient(Long clientId) throws SQLException {
-        ResultSet resultSet = executeQuery("SELECT SUM(price) FROM \"ORDER\" WHERE clientId = " + String.valueOf(clientId) + ";");
+        ResultSet resultSet =
+                executeQuery("SELECT SUM(price) FROM \"ORDER\" WHERE clientId = " + String.valueOf(clientId) + ";");
         String price = String.valueOf(0);
         if (resultSet.next()) {
             price = resultSet.getString(1);
@@ -76,7 +78,8 @@ public class DaoRepository {
 
     public List<OrderEntity> listOfAllOrdersToClientById(Long clientId) throws SQLException {
         List<OrderEntity> listOfAllOrdersToClient = new ArrayList<OrderEntity>();
-        ResultSet resultSet = executeQuery("SELECT * FROM \"ORDER\" WHERE clientId = " + String.valueOf(clientId) + ";");
+        ResultSet resultSet = executeQuery("SELECT * FROM \"ORDER\" WHERE clientId = " + String.valueOf(clientId) +
+                ";");
         while (resultSet.next()) {
             listOfAllOrdersToClient.add(prepareOrder(resultSet));
         }
@@ -93,7 +96,8 @@ public class DaoRepository {
     }
 
     public BigDecimal averageValueOfOrderToClientById(Long clientId) throws SQLException {
-        ResultSet resultSet = executeQuery("SELECT AVG(price) FROM \"ORDER\" WHERE clientId = " + String.valueOf(clientId) + ";");
+        ResultSet resultSet =
+                executeQuery("SELECT AVG(price) FROM \"ORDER\" WHERE clientId = " + String.valueOf(clientId) + ";");
         String price = String.valueOf(0);
         if (resultSet.next()) {
             price = resultSet.getString(1);
