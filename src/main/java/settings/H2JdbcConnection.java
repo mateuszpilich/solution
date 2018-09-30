@@ -1,9 +1,13 @@
-package db_settings;
+package settings;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * H2JdbcConnection class is for connection to database.
+ * @return connection: connection with database
+ */
 public class H2JdbcConnection {
 
     static final String JDBC_DRIVER = "org.h2.Driver";
@@ -20,9 +24,7 @@ public class H2JdbcConnection {
             Class.forName(JDBC_DRIVER);
             connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } catch (SQLException se) {
-            se.printStackTrace();
         }
         return connection;
     }
