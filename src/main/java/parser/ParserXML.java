@@ -4,12 +4,20 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import domain.OrderEntity;
 import domain.OrdersEntities;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Parser xml is for read data from files xml.
+ */
 public class ParserXML {
 
     public List<OrderEntity> readOders(String filePath, boolean removeDuplicates) {
