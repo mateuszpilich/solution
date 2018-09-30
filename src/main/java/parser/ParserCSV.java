@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
+/**
+ * Parser csv class if for read data from files csv.
+ */
 public class ParserCSV {
 
     public List<OrderEntity> readOrders(String filePath, boolean removeDuplicates) {
@@ -29,7 +32,6 @@ public class ParserCSV {
                 }
             });
         } catch (IOException e) {
-            e.printStackTrace();
         }
 
         if (removeDuplicates) {
