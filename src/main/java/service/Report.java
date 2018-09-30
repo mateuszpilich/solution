@@ -2,17 +2,16 @@ package service;
 
 import dao.DaoRepository;
 import domain.OrderEntity;
-import exceptions.ClientNotExistException;
 
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * The class helps to generate reports.
+ */
 public class Report {
 
     private DaoRepository daoRepository = new DaoRepository();
-
-    public Report() {
-    }
 
     public void totalOrdersNumber() throws SQLException {
         System.out.println("Number of total orders: " + daoRepository.totalOrdersNumber());
