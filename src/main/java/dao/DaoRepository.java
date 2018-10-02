@@ -1,7 +1,7 @@
 package dao;
 
-import settings.H2JdbcConnection;
 import domain.OrderEntity;
+import settings.H2JdbcConnection;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
