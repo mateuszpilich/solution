@@ -22,6 +22,13 @@ public class XmlParser {
     private List<OrderEntity> ordersEntities = new ArrayList<>();
     private Set<OrderEntity> ordersEntitiesWithoutDuplicates = new HashSet<>();
 
+    /**
+     * Method to parse content of file given by path.
+     *
+     * @param filePath         is path to file
+     * @param removeDuplicates true if duplicate orders are to be removed, otherwise false
+     * @return list with objects extracted from file, otherwise throws exception
+     */
     public List<OrderEntity> readOrders(String filePath, boolean removeDuplicates) {
         try {
             File file = new File(filePath);
@@ -39,14 +46,21 @@ public class XmlParser {
         return ordersEntities;
     }
 
-    private static String inputStreamToString(InputStream is) throws IOException {
-        StringBuilder sb = new StringBuilder();
+    /**
+     * The method reads the data line by line from the file.
+     *
+     * @param inputStream next byte of data from the input stream
+     * @return all bytes of data
+     * @throws IOException
+     */
+    private static String inputStreamToString(InputStream inputStream) throws IOException {
+        StringBuilder stringBuilder = new StringBuilder();
         String line;
-        BufferedReader br = new BufferedReader(new InputStreamReader(is));
-        while ((line = br.readLine()) != null) {
-            sb.append(line);
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        while ((line = bufferedReader.readLine()) != null) {
+            stringBuilder.append(line);
         }
-        br.close();
-        return sb.toString();
+        bufferedReader.close();
+        return stringBuilder.toString();
     }
 }
