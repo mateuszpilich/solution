@@ -18,12 +18,11 @@ import java.util.Set;
 /**
  * The class helps read data from files xml.
  */
-public class ParserXML {
+public class XmlParser {
+    private List<OrderEntity> ordersEntities = new ArrayList<>();
+    private Set<OrderEntity> ordersEntitiesWithoutDuplicates = new HashSet<>();
 
-    public List<OrderEntity> readOders(String filePath, boolean removeDuplicates) {
-        Set<OrderEntity> ordersEntityWithoutDuplicates = new HashSet<OrderEntity>();
-        List<OrderEntity> ordersEntities = new ArrayList<OrderEntity>();
-
+    public List<OrderEntity> readOrders(String filePath, boolean removeDuplicates) {
         try {
             File file = new File(filePath);
             XmlMapper xmlMapper = new XmlMapper();
@@ -33,9 +32,9 @@ public class ParserXML {
         } catch (Exception e) {
         }
         if (removeDuplicates) {
-            ordersEntityWithoutDuplicates = new HashSet<OrderEntity>(ordersEntities);
+            ordersEntitiesWithoutDuplicates = new HashSet<OrderEntity>(ordersEntities);
             ordersEntities.clear();
-            ordersEntities.addAll(ordersEntityWithoutDuplicates);
+            ordersEntities.addAll(ordersEntitiesWithoutDuplicates);
         }
         return ordersEntities;
     }
