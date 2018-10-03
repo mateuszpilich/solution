@@ -2,6 +2,8 @@ package parser;
 
 import domain.OrderEntity;
 import exceptions.UnsupportedFileExtensionException;
+import org.apache.log4j.Logger;
+import service.Report;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,7 @@ public class ParserImpl implements Parser {
 
     private XmlParser xmlParser;
     private CsvParser csvParser;
+    private static Logger logger = Logger.getLogger(Report.class);
 
     public ParserImpl() {
         this.xmlParser = new XmlParser();
@@ -37,6 +40,7 @@ public class ParserImpl implements Parser {
                 ordersEntities = csvParser.readOrders(filePath, removeDuplicates);
             }
         } else {
+            logger.error("The file with the given extension is not supported.");
             throw new UnsupportedFileExtensionException("The file with the given extension is not supported.");
         }
         return ordersEntities;
@@ -62,6 +66,7 @@ public class ParserImpl implements Parser {
                     ordersEntities = csvParser.readOrders(filesPaths[i], removeDuplicates);
                 }
             } else {
+                logger.error("The file with the given extension is not supported.");
                 throw new UnsupportedFileExtensionException("The file with the given extension is not supported.");
             }
             allOrdersEntities.addAll(ordersEntities);
