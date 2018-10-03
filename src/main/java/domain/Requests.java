@@ -7,18 +7,18 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import java.io.Serializable;
 import java.util.List;
 
-public class OrdersEntities implements Serializable {
+public class Requests implements Serializable {
 
     @JacksonXmlProperty(localName = "request")
     @JacksonXmlCData
     @JacksonXmlElementWrapper(useWrapping = false)
-    private List<OrderEntity> ordersEntities;
+    private List<Request> requestsEntities;
 
-    public List<OrderEntity> getOrdersEntities() {
-        return ordersEntities;
+    public List<Request> getRequestsEntities() {
+        return requestsEntities;
     }
 
-    public void setOrdersEntities(List<OrderEntity> ordersEntities) {
-        this.ordersEntities = ordersEntities;
+    public void setRequestsEntities(List<Request> requestsEntities) {
+        this.requestsEntities = requestsEntities;
     }
 }
