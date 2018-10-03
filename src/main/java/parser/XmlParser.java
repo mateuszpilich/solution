@@ -1,17 +1,12 @@
 package parser;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import domain.OrderEntity;
-import domain.OrdersEntities;
+import domain.Request;
+import domain.Requests;
 import org.apache.log4j.Logger;
 import service.Report;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -21,33 +16,33 @@ import java.util.Set;
  * The class helps read data from files xml.
  */
 public class XmlParser {
-    private List<OrderEntity> ordersEntities = new ArrayList<>();
-    private Set<OrderEntity> ordersEntitiesWithoutDuplicates = new HashSet<>();
-    private static Logger logger = Logger.getLogger(Report.class);
+    private List<Request> requestsEntities = new ArrayList<>();
+    private Set<Request> requestsEntitiesWithoutDuplicates = new HashSet<>();
+    private static final Logger LOGGER = Logger.getLogger(Report.class);
 
     /**
      * Method to parse content of file given by path.
      *
      * @param filePath         is path to file
-     * @param removeDuplicates true if duplicate orders are to be removed, otherwise false
+     * @param removeDuplicates true if duplicate requests are to be removed, otherwise false
      * @return list with objects extracted from file, otherwise throws exception
      */
-    public List<OrderEntity> readOrders(String filePath, boolean removeDuplicates) {
+    public List<Request> readRequests(String filePath, boolean removeDuplicates) {
         try {
             File file = new File(filePath);
             XmlMapper xmlMapper = new XmlMapper();
             String xml = inputStreamToString(new FileInputStream(file));
-            OrdersEntities orders = xmlMapper.readValue(xml, OrdersEntities.class);
-            ordersEntities.addAll(orders.getOrdersEntities());
+            Requests requests = xmlMapper.readValue(xml, Requests.class);
+            requestsEntities.addAll(requests.getRequestsEntities());
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         if (removeDuplicates) {
-            ordersEntitiesWithoutDuplicates = new HashSet<OrderEntity>(ordersEntities);
-            ordersEntities.clear();
-            ordersEntities.addAll(ordersEntitiesWithoutDuplicates);
+            requestsEntitiesWithoutDuplicates = new HashSet<Request>(requestsEntities);
+            requestsEntities.clear();
+            requestsEntities.addAll(requestsEntitiesWithoutDuplicates);
         }
-        return ordersEntities;
+        return requestsEntities;
     }
 
     /**
