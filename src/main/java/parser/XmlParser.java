@@ -3,6 +3,8 @@ package parser;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import domain.OrderEntity;
 import domain.OrdersEntities;
+import org.apache.log4j.Logger;
+import service.Report;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -21,6 +23,7 @@ import java.util.Set;
 public class XmlParser {
     private List<OrderEntity> ordersEntities = new ArrayList<>();
     private Set<OrderEntity> ordersEntitiesWithoutDuplicates = new HashSet<>();
+    private static Logger logger = Logger.getLogger(Report.class);
 
     /**
      * Method to parse content of file given by path.
@@ -37,6 +40,7 @@ public class XmlParser {
             OrdersEntities orders = xmlMapper.readValue(xml, OrdersEntities.class);
             ordersEntities.addAll(orders.getOrdersEntities());
         } catch (Exception e) {
+            logger.error(e.getMessage());
         }
         if (removeDuplicates) {
             ordersEntitiesWithoutDuplicates = new HashSet<OrderEntity>(ordersEntities);
