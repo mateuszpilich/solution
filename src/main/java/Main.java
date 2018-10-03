@@ -1,5 +1,5 @@
 import dao.DaoRepository;
-import domain.OrderEntity;
+import domain.Request;
 import exceptions.UnsupportedFileExtensionException;
 import org.apache.log4j.Logger;
 import parser.Parser;
@@ -8,75 +8,75 @@ import service.Report;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * The main class of the program.
  */
 public class Main {
-    private final static Parser parser = new ParserImpl();
-    private final static String filePathCsv = "C://orders.csv";
-    private final static String filePathXml = "C://orders.xml";
-    private final static String[] filesPaths = {"C://orders.csv", "C://orders.xml"};
-    private static Logger logger = Logger.getLogger(Report.class);
+    private static final Parser PARSER = new ParserImpl();
+    private static final List<String> filesPaths = Arrays.asList("C://requests.csv", "C://requests.xml");
+    private static final Logger LOGGER = Logger.getLogger(Report.class);
 
     public static void main(String[] args) {
+        //List<String> filesPaths = Arrays.asList(args);
         DaoRepository daoRepository = new DaoRepository();
-        List<OrderEntity> newOrdersEntities = new ArrayList<OrderEntity>();
+        List<Request> newRequestsEntities = new ArrayList<Request>();
         try {
-            newOrdersEntities = parser.readDataFromFile(filesPaths, true);
+            newRequestsEntities = PARSER.readDataFromFile(filesPaths, true);
         } catch (UnsupportedFileExtensionException e) {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
 
-        newOrdersEntities.forEach(newOrderEntity -> {
+        newRequestsEntities.forEach(newRequestEntity -> {
             try {
-                daoRepository.addNewOrder(newOrderEntity);
+                daoRepository.addNewRequest(newRequestEntity);
             } catch (SQLException e) {
-                logger.error(e.getMessage());
+                LOGGER.error(e.getMessage());
             }
         });
 
         Report report = new Report();
         try {
-            report.totalOrdersNumber();
+            report.totalRequestsNumber();
         } catch (SQLException e) {
-            logger.error(e.getMessage());
+            LOGGER.info(e.getMessage());
         }
         try {
-            report.totalOrdersNumberToClientById(1L);
+            report.totalRequestsNumberToClientById(1L);
         } catch (SQLException e) {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         try {
-            report.totalOrdersPrice();
+            report.totalRequestsPrice();
         } catch (SQLException e) {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         try {
-            report.totalOrdersPriceToClientById(1L);
+            report.totalRequestsPriceToClientById(1L);
         } catch (SQLException e) {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         try {
-            report.listOfAllOrders();
+            report.listOfAllRequests();
         } catch (SQLException e) {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         try {
-            report.listOfAllOrdersToClientById(1L);
+            report.listOfAllRequestsToClientById(1L);
         } catch (SQLException e) {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         try {
-            report.averageValueOfOrder();
+            report.averageValueOfRequest();
         } catch (SQLException e) {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         try {
-            report.averageValueOfOrderToClientById(1L);
+            report.averageValueOfRequestToClientById(1L);
         } catch (SQLException e) {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
     }
 }
