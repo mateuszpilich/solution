@@ -2,6 +2,8 @@ package parser;
 
 import domain.OrderEntity;
 import exceptions.WrongInputDataException;
+import org.apache.log4j.Logger;
+import service.Report;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -18,6 +20,10 @@ import java.util.stream.Stream;
  * The class helps read data from files csv.
  */
 public class CsvParser {
+    private OrderEntity orderEntity;
+    private List<OrderEntity> orderEntities = new ArrayList<OrderEntity>();
+    private Set<OrderEntity> ordersEntityWithoutDuplicates = new HashSet<OrderEntity>();
+    private static Logger logger = Logger.getLogger(Report.class);
 
     /**
      * Method to parse content of file given by path.
@@ -27,19 +33,18 @@ public class CsvParser {
      * @return list with objects extracted from file, otherwise throws exception
      */
     public List<OrderEntity> readOrders(String filePath, boolean removeDuplicates) {
-        Set<OrderEntity> ordersEntityWithoutDuplicates = new HashSet<OrderEntity>();
-        List<OrderEntity> orderEntities = new ArrayList<OrderEntity>();
-        OrderEntity orderEntity;
-
         try (Stream<String> stream = Files.lines(Paths.get(filePath), StandardCharsets.UTF_8)) {
             stream.forEach(order -> {
                 try {
                     orderEntities.add(createOrder(order));
                 } catch (NumberFormatException e) {
+                    logger.error(e.getMessage());
                 } catch (WrongInputDataException e) {
+                    logger.error(e.getMessage());
                 }
             });
         } catch (IOException e) {
+            logger.error(e.getMessage());
         }
 
         if (removeDuplicates) {
@@ -69,6 +74,7 @@ public class CsvParser {
             BigDecimal price = BigDecimal.valueOf(Double.parseDouble(order[4]));
             orderEntity = new OrderEntity(id, clientId, requestId, name, quantity, price);
         } catch (Exception e) {
+            logger.error("Incorrect order data!");
             throw new WrongInputDataException("Incorrect order data!");
         }
         return orderEntity;
