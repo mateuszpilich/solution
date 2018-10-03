@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- * The class helps represents order.
+ * The class helps represents request.
  */
-public class OrderEntity implements Serializable {
+public class Request implements Serializable {
 
     private Long id;
     private String clientId;
@@ -15,10 +15,10 @@ public class OrderEntity implements Serializable {
     private Integer quantity;
     private BigDecimal price;
 
-    public OrderEntity() {
+    public Request() {
     }
 
-    public OrderEntity(Long id, String clientId, Long requestId, String name, Integer quantity, BigDecimal price) {
+    public Request(Long id, String clientId, Long requestId, String name, Integer quantity, BigDecimal price) {
         this.id = id;
         this.clientId = clientId;
         this.requestId = requestId;
