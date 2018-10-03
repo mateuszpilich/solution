@@ -1,6 +1,6 @@
 package parser;
 
-import domain.OrderEntity;
+import domain.Request;
 import exceptions.WrongInputDataException;
 import org.apache.log4j.Logger;
 import service.Report;
@@ -20,63 +20,63 @@ import java.util.stream.Stream;
  * The class helps read data from files csv.
  */
 public class CsvParser {
-    private OrderEntity orderEntity;
-    private List<OrderEntity> orderEntities = new ArrayList<OrderEntity>();
-    private Set<OrderEntity> ordersEntityWithoutDuplicates = new HashSet<OrderEntity>();
-    private static Logger logger = Logger.getLogger(Report.class);
+    private Request request;
+    private List<Request> requestsEntities = new ArrayList<Request>();
+    private Set<Request> requestsEntityWithoutDuplicates = new HashSet<Request>();
+    private static final Logger LOGGER = Logger.getLogger(Report.class);
 
     /**
      * Method to parse content of file given by path.
      *
      * @param filePath         is path to file
-     * @param removeDuplicates true if duplicate orders are to be removed, otherwise false
+     * @param removeDuplicates true if duplicate requests are to be removed, otherwise false
      * @return list with objects extracted from file, otherwise throws exception
      */
-    public List<OrderEntity> readOrders(String filePath, boolean removeDuplicates) {
+    public List<Request> readRequests(String filePath, boolean removeDuplicates) {
         try (Stream<String> stream = Files.lines(Paths.get(filePath), StandardCharsets.UTF_8)) {
-            stream.forEach(order -> {
+            stream.forEach(request -> {
                 try {
-                    orderEntities.add(createOrder(order));
+                    requestsEntities.add(createRequest(request));
                 } catch (NumberFormatException e) {
-                    logger.error(e.getMessage());
+                    LOGGER.error(e.getMessage());
                 } catch (WrongInputDataException e) {
-                    logger.error(e.getMessage());
+                    LOGGER.error(e.getMessage());
                 }
             });
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
 
         if (removeDuplicates) {
-            ordersEntityWithoutDuplicates = new HashSet<OrderEntity>(orderEntities);
-            orderEntities.clear();
-            orderEntities.addAll(ordersEntityWithoutDuplicates);
+            requestsEntityWithoutDuplicates = new HashSet<Request>(requestsEntities);
+            requestsEntities.clear();
+            requestsEntities.addAll(requestsEntityWithoutDuplicates);
         }
-        return orderEntities;
+        return requestsEntities;
     }
 
     /**
-     * The method creates a new order from the data from the array.
+     * The method creates a new request from the data from the array.
      *
-     * @param orderFromFile data of new order
-     * @return new order entity
-     * @throws WrongInputDataException incorrect order data
+     * @param requestFromFile data of new request
+     * @return new request entity
+     * @throws WrongInputDataException incorrect request data
      */
-    private OrderEntity createOrder(String orderFromFile) throws WrongInputDataException {
-        String[] order = orderFromFile.split(",");
-        OrderEntity orderEntity;
+    private Request createRequest(String requestFromFile) throws WrongInputDataException {
+        String[] request = requestFromFile.split(",");
+        Request requestEntity;
         try {
             Long id = null;
-            String clientId = order[0];
-            Long requestId = Long.parseLong(order[1]);
-            String name = order[2];
-            Integer quantity = Integer.parseInt(order[3]);
-            BigDecimal price = BigDecimal.valueOf(Double.parseDouble(order[4]));
-            orderEntity = new OrderEntity(id, clientId, requestId, name, quantity, price);
+            String clientId = request[0];
+            Long requestId = Long.parseLong(request[1]);
+            String name = request[2];
+            Integer quantity = Integer.parseInt(request[3]);
+            BigDecimal price = BigDecimal.valueOf(Double.parseDouble(request[4]));
+            requestEntity = new Request(id, clientId, requestId, name, quantity, price);
         } catch (Exception e) {
-            logger.error("Incorrect order data!");
-            throw new WrongInputDataException("Incorrect order data!");
+            LOGGER.error("Incorrect request data!");
+            throw new WrongInputDataException("Incorrect request data!");
         }
-        return orderEntity;
+        return requestEntity;
     }
 }
