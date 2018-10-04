@@ -41,7 +41,7 @@ public class Main {
         try {
             report.totalRequestsNumber();
         } catch (SQLException e) {
-            LOGGER.info(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         try {
             report.totalRequestsNumberToClientById(1L);
