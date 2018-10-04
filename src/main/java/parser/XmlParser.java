@@ -4,7 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import domain.Request;
 import domain.Requests;
 import org.apache.log4j.Logger;
-import service.Report;
+import service.ReportImpl;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import java.util.Set;
 public class XmlParser {
     private List<Request> requestsEntities = new ArrayList<>();
     private Set<Request> requestsEntitiesWithoutDuplicates = new HashSet<>();
-    private static final Logger LOGGER = Logger.getLogger(Report.class);
+    private static final Logger LOGGER = Logger.getLogger(ReportImpl.class);
 
     /**
      * Method to parse content of file given by path.
