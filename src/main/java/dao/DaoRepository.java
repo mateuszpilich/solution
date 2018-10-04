@@ -1,121 +1,93 @@
+/**
+ * Dao contain set of functionalities for queries to database.
+ *
+ * @version 1.0
+ */
 package dao;
 
 import domain.Request;
-import settings.H2JdbcConnection;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The class helps send queries to database.
+ * The class have a set of functionalities for the DaoRepositoryImpl class.
  */
-public class DaoRepository {
-    private Connection connection = new H2JdbcConnection().getConnection();
-    private Statement statement;
+public interface DaoRepository {
+    /**
+     * Method to add new request to database.
+     *
+     * @param request is new request
+     * @throws SQLException when query is wrong
+     */
+    void addNewRequest(Request request) throws SQLException;
 
-    public void addNewRequest(Request request) throws SQLException {
-        statement = connection.createStatement();
-        statement.executeUpdate("insert into REQUEST (clientId,requestId,name,quantity,price) values('"
-                + request.getClientId() + "',"
-                + request.getRequestId() + ",'"
-                + request.getName() + "',"
-                + request.getQuantity() + ","
-                + request.getPrice() + ")");
-    }
+    /**
+     * Method to count total number of request.
+     *
+     * @return amount total requests
+     * @throws SQLException when query is wrong
+     */
+    Long totalRequestsNumber() throws SQLException;
 
-    public String totalRequestsNumber() throws SQLException {
-        ResultSet resultSet = executeQuery("SELECT COUNT(id) FROM REQUEST;");
-        String amount = String.valueOf(0);
-        if (resultSet.next()) {
-            amount = resultSet.getString(1);
-        }
-        return amount;
-    }
+    /**
+     * Method to count total number of request to client by id.
+     *
+     * @param clientId is id to client
+     * @return amount total requests to client by id
+     * @throws SQLException when query is wrong
+     */
+    Long totalRequestsNumberByClientId(Long clientId) throws SQLException;
 
-    public String totalRequestsNumberByClient(Long clientId) throws SQLException {
-        ResultSet resultSet =
-                executeQuery("SELECT COUNT(id) FROM REQUEST WHERE clientId = " + String.valueOf(clientId) + ";");
-        String amount = String.valueOf(0);
-        if (resultSet.next()) {
-            amount = resultSet.getString(1);
-        }
-        return amount;
-    }
+    /**
+     * Method to count price for total requests.
+     *
+     * @return amount total price for requests
+     * @throws SQLException when query is wrong
+     */
+    BigDecimal totalRequestsPrice() throws SQLException;
 
-    public BigDecimal totalRequestsPrice() throws SQLException {
-        ResultSet resultSet = executeQuery("SELECT SUM(price) FROM REQUEST;");
-        String price = String.valueOf(0);
-        if (resultSet.next()) {
-            price = resultSet.getString(1);
-        }
-        return new BigDecimal(price).setScale(2, BigDecimal.ROUND_CEILING);
-    }
+    /**
+     * Method to count price for total requests to client by id.
+     *
+     * @param clientId is id to client
+     * @return amount total price for requests to client by id
+     * @throws SQLException when query is wrong
+     */
+    BigDecimal totalRequestsPriceByClientId(Long clientId) throws SQLException;
 
-    public BigDecimal totalRequestsPriceByClient(Long clientId) throws SQLException {
-        ResultSet resultSet =
-                executeQuery("SELECT SUM(price) FROM REQUEST WHERE clientId = " + String.valueOf(clientId) + ";");
-        String price = String.valueOf(0);
-        if (resultSet.next()) {
-            price = resultSet.getString(1);
-        }
-        return new BigDecimal(price).setScale(2, BigDecimal.ROUND_CEILING);
-    }
+    /**
+     * Method to count the list of all requests.
+     *
+     * @return list of all requests
+     * @throws SQLException when query is wrong
+     */
+    List<Request> listOfAllRequests() throws SQLException;
 
-    public List<Request> listOfAllRequests() throws SQLException {
-        List<Request> listOfAllRequests = new ArrayList<Request>();
-        ResultSet resultSet = executeQuery("SELECT * FROM REQUEST");
-        while (resultSet.next()) {
-            listOfAllRequests.add(prepareRequest(resultSet));
-        }
-        return listOfAllRequests;
-    }
+    /**
+     * Method to count the list of all requests to client by id.
+     *
+     * @param clientId is id to client
+     * @return list of all requests to client by id
+     * @throws SQLException when query is wrong
+     */
+    List<Request> listOfAllRequestsToClientById(Long clientId) throws SQLException;
 
-    public List<Request> listOfAllRequestsToClientById(Long clientId) throws SQLException {
-        List<Request> listOfAllRequestsToClient = new ArrayList<Request>();
-        ResultSet resultSet = executeQuery("SELECT * FROM REQUEST WHERE clientId = " + String.valueOf(clientId) +
-                ";");
-        while (resultSet.next()) {
-            listOfAllRequestsToClient.add(prepareRequest(resultSet));
-        }
-        return listOfAllRequestsToClient;
-    }
+    /**
+     * Method to count average value of request.
+     *
+     * @return average value of request
+     * @throws SQLException when query is wrong
+     */
+    BigDecimal averageValueOfRequest() throws SQLException;
 
-    public BigDecimal averageValueOfRequest() throws SQLException {
-        ResultSet resultSet = executeQuery("SELECT AVG(price) FROM REQUEST");
-        String price = String.valueOf(0);
-        if (resultSet.next()) {
-            price = resultSet.getString(1);
-        }
-        return new BigDecimal(price).setScale(2, BigDecimal.ROUND_CEILING);
-    }
-
-    public BigDecimal averageValueOfRequestToClientById(Long clientId) throws SQLException {
-        ResultSet resultSet =
-                executeQuery("SELECT AVG(price) FROM REQUEST WHERE clientId = " + String.valueOf(clientId) + ";");
-        String price = String.valueOf(0);
-        if (resultSet.next()) {
-            price = resultSet.getString(1);
-        }
-        return new BigDecimal(price).setScale(2, BigDecimal.ROUND_CEILING);
-    }
-
-    private ResultSet executeQuery(String query) throws SQLException {
-        statement = connection.createStatement();
-        return statement.executeQuery(query);
-    }
-
-    private Request prepareRequest(ResultSet resultSet) throws SQLException {
-        Long id = resultSet.getLong("id");
-        String clientIdRs = resultSet.getString("clientId");
-        Long requestId = resultSet.getLong("requestId");
-        String name = resultSet.getString("name");
-        Integer quantity = resultSet.getInt("quantity");
-        BigDecimal price = resultSet.getBigDecimal("price");
-        return new Request(id, clientIdRs, requestId, name, quantity, price);
-    }
+    /**
+     * Method to count average value of request to client by id.
+     *
+     * @param clientId is id to client
+     * @return average value of request to client by id
+     * @throws SQLException when query is wrong
+     */
+    BigDecimal averageValueOfRequestToClientById(Long clientId) throws SQLException;
 }
