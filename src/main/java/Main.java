@@ -39,7 +39,7 @@ public class Main {
 
         ReportImpl reportImpl = new ReportImpl();
         try {
-            reportImpl.totalRequestsNumber();
+            reportImpl.totalNumberOfRequests();
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
         }
