@@ -1,4 +1,7 @@
+package main;
+
 import dao.DaoRepository;
+import dao.DaoRepositoryImpl;
 import domain.Request;
 import exceptions.UnsupportedFileExtensionException;
 import org.apache.log4j.Logger;
@@ -16,22 +19,22 @@ import java.util.List;
  */
 public class Main {
     private static final Parser PARSER = new ParserImpl();
-    private static final List<String> filesPaths = Arrays.asList("C://requests.csv", "C://requests.xml");
+    private static final DaoRepository DAO_REPOSITORY = new DaoRepositoryImpl();
+    private static final List<String> FILES_PATHS = Arrays.asList("C://requests.csv", "C://requests.xml"); //sprawdzic wczytywanie z xml z bledem
     private static final Logger LOGGER = Logger.getLogger(ReportImpl.class);
+    private static List<Request> newRequestsEntities = new ArrayList<Request>();
 
     public static void main(String[] args) {
         //List<String> filesPaths = Arrays.asList(args);
-        DaoRepository daoRepository = new DaoRepository();
-        List<Request> newRequestsEntities = new ArrayList<Request>();
         try {
-            newRequestsEntities = PARSER.readDataFromFile(filesPaths, true);
+            newRequestsEntities = PARSER.readDataFromFiles(FILES_PATHS, true);
         } catch (UnsupportedFileExtensionException e) {
             LOGGER.error(e.getMessage());
         }
 
         newRequestsEntities.forEach(newRequestEntity -> {
             try {
-                daoRepository.addNewRequest(newRequestEntity);
+                DAO_REPOSITORY.addNewRequest(newRequestEntity);
             } catch (SQLException e) {
                 LOGGER.error(e.getMessage());
             }
