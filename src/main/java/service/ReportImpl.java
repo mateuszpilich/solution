@@ -1,6 +1,6 @@
 package service;
 
-import dao.DaoRepository;
+import dao.DaoRepositoryImpl;
 import domain.Request;
 import org.apache.log4j.Logger;
 import writer.XmlWriter;
@@ -13,7 +13,7 @@ import java.util.List;
  * The class helps to generate reports.
  */
 public class ReportImpl {
-    private DaoRepository daoRepository = new DaoRepository();
+    private DaoRepositoryImpl daoRepositoryImpl = new DaoRepositoryImpl();
     private XmlWriter xmlWriter = new XmlWriter();
     private static final Logger LOGGER = Logger.getLogger(ReportImpl.class);
 
@@ -23,10 +23,10 @@ public class ReportImpl {
      * @throws SQLException
      */
     public void totalNumberOfRequests() throws SQLException {
-        String amount = daoRepository.totalRequestsNumber();
+        Long amount = daoRepositoryImpl.totalRequestsNumber();
         LOGGER.info("Number of total requests: " + amount);
         xmlWriter.writeReportsToXmlFile("totalNumberOfRequests",
-                new TotalNumberOfRequests(Long.parseLong(daoRepository.totalRequestsNumber())));
+                new TotalNumberOfRequests(amount));
     }
 
     /**
@@ -36,10 +36,10 @@ public class ReportImpl {
      * @throws SQLException
      */
     public void totalRequestsNumberToClientById(Long clientId) throws SQLException {
-        String amount = daoRepository.totalRequestsNumberByClient(clientId);
+        Long amount = daoRepositoryImpl.totalRequestsNumberByClientId(clientId);
         LOGGER.info("Number of total requests to client for id: " + clientId + " is: " + amount);
         xmlWriter.writeReportsToXmlFile("totalRequestsNumberToClientById",
-                new TotalRequestsNumberToClientById(clientId, Long.parseLong(amount)));
+                new TotalRequestsNumberToClientById(clientId, amount));
     }
 
     /**
@@ -48,7 +48,7 @@ public class ReportImpl {
      * @throws SQLException
      */
     public void totalRequestsPrice() throws SQLException {
-        BigDecimal price = daoRepository.totalRequestsPrice();
+        BigDecimal price = daoRepositoryImpl.totalRequestsPrice();
         LOGGER.info("Price of total requests: " + price);
         xmlWriter.writeReportsToXmlFile("totalRequestsPrice", new TotalRequestsPrice(price));
     }
@@ -60,7 +60,7 @@ public class ReportImpl {
      * @throws SQLException
      */
     public void totalRequestsPriceToClientById(Long clientId) throws SQLException {
-        BigDecimal price = daoRepository.totalRequestsPriceByClient(clientId);
+        BigDecimal price = daoRepositoryImpl.totalRequestsPriceByClientId(clientId);
         LOGGER.info("Price of total requests to client for id: " + clientId + " is: " + price);
         xmlWriter.writeReportsToXmlFile("totalRequestsPriceToClientById", new TotalRequestsPriceToClientById(clientId
                 , price));
@@ -72,7 +72,7 @@ public class ReportImpl {
      * @throws SQLException
      */
     public void listOfAllRequests() throws SQLException {
-        List<Request> requestsEntities = daoRepository.listOfAllRequests();
+        List<Request> requestsEntities = daoRepositoryImpl.listOfAllRequests();
         LOGGER.info("List of total requests:");
         requestsEntities.forEach(request ->
                 LOGGER.info(request.getId() + ","
@@ -91,7 +91,7 @@ public class ReportImpl {
      * @throws SQLException
      */
     public void listOfAllRequestsToClientById(Long clientId) throws SQLException {
-        List<Request> requestsEntities = daoRepository.listOfAllRequestsToClientById(clientId);
+        List<Request> requestsEntities = daoRepositoryImpl.listOfAllRequestsToClientById(clientId);
         LOGGER.info("List of total requests to client for id: " + clientId + " is:");
         requestsEntities.forEach(request ->
                 LOGGER.info(request.getId() + ","
@@ -110,7 +110,7 @@ public class ReportImpl {
      * @throws SQLException
      */
     public void averageValueOfRequest() throws SQLException {
-        BigDecimal value = daoRepository.averageValueOfRequest();
+        BigDecimal value = daoRepositoryImpl.averageValueOfRequest();
         LOGGER.info("Average value of request: " + value);
         xmlWriter.writeReportsToXmlFile("averageValueOfRequest", new AverageValueOfRequest(value));
     }
@@ -122,7 +122,7 @@ public class ReportImpl {
      * @throws SQLException
      */
     public void averageValueOfRequestToClientById(Long clientId) throws SQLException {
-        BigDecimal value = daoRepository.averageValueOfRequestToClientById(clientId);
+        BigDecimal value = daoRepositoryImpl.averageValueOfRequestToClientById(clientId);
         LOGGER.info("Average value of request to client for id: " + clientId + " is: " + value);
         xmlWriter.writeReportsToXmlFile("averageValueOfRequestToClientById",
                 new AverageValueOfRequestToClientById(clientId, value));
