@@ -4,7 +4,7 @@ import exceptions.UnsupportedFileExtensionException;
 import org.apache.log4j.Logger;
 import parser.Parser;
 import parser.ParserImpl;
-import service.Report;
+import service.ReportImpl;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.List;
 public class Main {
     private static final Parser PARSER = new ParserImpl();
     private static final List<String> filesPaths = Arrays.asList("C://requests.csv", "C://requests.xml");
-    private static final Logger LOGGER = Logger.getLogger(Report.class);
+    private static final Logger LOGGER = Logger.getLogger(ReportImpl.class);
 
     public static void main(String[] args) {
         //List<String> filesPaths = Arrays.asList(args);
@@ -37,44 +37,44 @@ public class Main {
             }
         });
 
-        Report report = new Report();
+        ReportImpl reportImpl = new ReportImpl();
         try {
-            report.totalRequestsNumber();
+            reportImpl.totalRequestsNumber();
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
         }
         try {
-            report.totalRequestsNumberToClientById(1L);
+            reportImpl.totalRequestsNumberToClientById(1L);
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
         }
         try {
-            report.totalRequestsPrice();
+            reportImpl.totalRequestsPrice();
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
         }
         try {
-            report.totalRequestsPriceToClientById(1L);
+            reportImpl.totalRequestsPriceToClientById(1L);
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
         }
         try {
-            report.listOfAllRequests();
+            reportImpl.listOfAllRequests();
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
         }
         try {
-            report.listOfAllRequestsToClientById(1L);
+            reportImpl.listOfAllRequestsToClientById(1L);
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
         }
         try {
-            report.averageValueOfRequest();
+            reportImpl.averageValueOfRequest();
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
         }
         try {
-            report.averageValueOfRequestToClientById(1L);
+            reportImpl.averageValueOfRequestToClientById(1L);
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
         }
