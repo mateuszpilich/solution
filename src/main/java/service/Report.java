@@ -21,7 +21,7 @@ public class Report {
      * @throws SQLException
      */
     public void totalRequestsNumber() throws SQLException {
-        LOGGER.debug("Number of total requests: " + daoRepository.totalRequestsNumber());
+        LOGGER.info("Number of total requests: " + daoRepository.totalRequestsNumber());
     }
 
     /**
@@ -31,7 +31,7 @@ public class Report {
      * @throws SQLException
      */
     public void totalRequestsNumberToClientById(Long clientId) throws SQLException {
-        LOGGER.debug("Number of total requests to client for id: " + clientId + " is: " + daoRepository.totalRequestsNumberByClient(clientId));
+        LOGGER.info("Number of total requests to client for id: " + clientId + " is: " + daoRepository.totalRequestsNumberByClient(clientId));
     }
 
     /**
@@ -40,7 +40,7 @@ public class Report {
      * @throws SQLException
      */
     public void totalRequestsPrice() throws SQLException {
-        LOGGER.debug("Price of total requests: " + daoRepository.totalRequestsPrice());
+        LOGGER.info("Price of total requests: " + daoRepository.totalRequestsPrice());
     }
 
     /**
@@ -50,7 +50,7 @@ public class Report {
      * @throws SQLException
      */
     public void totalRequestsPriceToClientById(Long clientId) throws SQLException {
-        LOGGER.debug("Price of total requests to client for id: " + clientId + " is: " + daoRepository.totalRequestsPriceByClient(clientId));
+        LOGGER.info("Price of total requests to client for id: " + clientId + " is: " + daoRepository.totalRequestsPriceByClient(clientId));
     }
 
     /**
@@ -60,9 +60,9 @@ public class Report {
      */
     public void listOfAllRequests() throws SQLException {
         List<Request> requestsEntities = daoRepository.listOfAllRequests();
-        LOGGER.debug("List of total requests:");
+        LOGGER.info("List of total requests:");
         requestsEntities.forEach(request ->
-                LOGGER.debug(request.getId() + ","
+                LOGGER.info(request.getId() + ","
                         + request.getClientId() + ","
                         + request.getRequestId() + ","
                         + request.getName() + ","
@@ -78,9 +78,9 @@ public class Report {
      */
     public void listOfAllRequestsToClientById(Long clientId) throws SQLException {
         List<Request> requestsEntities = daoRepository.listOfAllRequestsToClientById(clientId);
-        LOGGER.debug("List of total requests to client for id: " + clientId + " is:");
+        LOGGER.info("List of total requests to client for id: " + clientId + " is:");
         requestsEntities.forEach(request ->
-                LOGGER.debug(request.getId() + ","
+                LOGGER.info(request.getId() + ","
                         + request.getClientId() + ","
                         + request.getRequestId() + ","
                         + request.getName() + ","
@@ -94,7 +94,7 @@ public class Report {
      * @throws SQLException
      */
     public void averageValueOfRequest() throws SQLException {
-        LOGGER.debug("Average value of request: " + daoRepository.averageValueOfRequest());
+        LOGGER.info("Average value of request: " + daoRepository.averageValueOfRequest());
     }
 
     /**
@@ -104,6 +104,6 @@ public class Report {
      * @throws SQLException
      */
     public void averageValueOfRequestToClientById(Long clientId) throws SQLException {
-        LOGGER.debug("Average value of request to client for id: " + clientId + " is: " + daoRepository.averageValueOfRequestToClientById(clientId));
+        LOGGER.info("Average value of request to client for id: " + clientId + " is: " + daoRepository.averageValueOfRequestToClientById(clientId));
     }
 }
