@@ -3,7 +3,7 @@ package parser;
 import domain.Request;
 import exceptions.WrongInputDataException;
 import org.apache.log4j.Logger;
-import service.Report;
+import service.ReportImpl;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -22,8 +22,8 @@ import java.util.stream.Stream;
 public class CsvParser {
     private Request request;
     private List<Request> requestsEntities = new ArrayList<Request>();
-    private Set<Request> requestsEntityWithoutDuplicates = new HashSet<Request>();
-    private static final Logger LOGGER = Logger.getLogger(Report.class);
+    private Set<Request> requestsEntitiesWithoutDuplicates = new HashSet<Request>();
+    private static final Logger LOGGER = Logger.getLogger(ReportImpl.class);
 
     /**
      * Method to parse content of file given by path.
@@ -48,9 +48,9 @@ public class CsvParser {
         }
 
         if (removeDuplicates) {
-            requestsEntityWithoutDuplicates = new HashSet<Request>(requestsEntities);
+            requestsEntitiesWithoutDuplicates = new HashSet<Request>(requestsEntities);
             requestsEntities.clear();
-            requestsEntities.addAll(requestsEntityWithoutDuplicates);
+            requestsEntities.addAll(requestsEntitiesWithoutDuplicates);
         }
         return requestsEntities;
     }
