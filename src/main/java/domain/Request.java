@@ -20,7 +20,7 @@ public class Request implements Serializable {
 
     public Request(Long id, String clientId, Long requestId, String name, Integer quantity, BigDecimal price) {
         this.id = id;
-        this.clientId = clientId;
+        this.clientId = clientId.replaceAll(" ","");
         this.requestId = requestId;
         this.name = name;
         this.quantity = quantity;
