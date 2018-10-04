@@ -1,7 +1,7 @@
 package settings;
 
 import org.apache.log4j.Logger;
-import service.Report;
+import service.ReportImpl;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,7 +15,7 @@ public class H2JdbcConnection {
     private static final String DB_URL = "jdbc:h2:mem:dbInMemory;INIT=runscript from 'classpath:createTable.sql'";
     private static final String USER = "root";
     private static final String PASSWORD = "mypassword";
-    private static final Logger LOGGER = Logger.getLogger(Report.class);
+    private static final Logger LOGGER = Logger.getLogger(ReportImpl.class);
 
     public Connection getConnection() {
         Connection connection = null;
