@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * The class helps read data from files xml.
+ * The class helps read data from xml files.
  */
 public class XmlParser {
     private List<Request> requestsEntities = new ArrayList<>();
