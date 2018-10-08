@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import parser.Parser;
 import parser.ParserImpl;
 import service.ReportImpl;
+import settings.H2JdbcConnection;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,8 +20,10 @@ import java.util.List;
  */
 public class Main {
     private static final Parser PARSER = new ParserImpl();
-    private static final DaoRepository DAO_REPOSITORY = new DaoRepositoryImpl();
-    private static final List<String> FILES_PATHS = Arrays.asList("C://requests.csv", "C://requests.xml"); //sprawdzic wczytywanie z xml z bledem
+    private static final DaoRepository DAO_REPOSITORY =
+            new DaoRepositoryImpl(new H2JdbcConnection().getConnection());
+    private static final List<String> FILES_PATHS = Arrays.asList("C" +
+            "://requests.csv", "C://requests.xml");
     private static final Logger LOGGER = Logger.getLogger(ReportImpl.class);
     private static List<Request> newRequestsEntities = new ArrayList<Request>();
 
