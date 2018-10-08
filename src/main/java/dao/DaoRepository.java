@@ -1,7 +1,5 @@
 /**
  * Dao contain set of functionalities for queries to database.
- *
- * @version 1.0
  */
 package dao;
 
@@ -12,7 +10,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * The class have a set of functionalities for the DaoRepositoryImpl class.
+ * This interface have a set of functionalities for the DaoRepository.
  */
 public interface DaoRepository {
     /**
@@ -24,7 +22,7 @@ public interface DaoRepository {
     void addNewRequest(Request request) throws SQLException;
 
     /**
-     * Method to count total number of request.
+     * Method to count total number of requests.
      *
      * @return amount total requests
      * @throws SQLException when query is wrong
@@ -32,7 +30,7 @@ public interface DaoRepository {
     Long totalRequestsNumber() throws SQLException;
 
     /**
-     * Method to count total number of request to client by id.
+     * Method to count total number of requests to client by id.
      *
      * @param clientId is id to client
      * @return amount total requests to client by id
