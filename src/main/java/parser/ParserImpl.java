@@ -1,21 +1,21 @@
 package parser;
 
-import domain.OrderEntity;
+import domain.Request;
 import exceptions.UnsupportedFileExtensionException;
 import org.apache.log4j.Logger;
-import service.Report;
+import service.ReportImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The class helps read data from xml and csv files.
  */
 public class ParserImpl implements Parser {
-
     private XmlParser xmlParser;
     private CsvParser csvParser;
-    private static Logger logger = Logger.getLogger(Report.class);
+    private static final Logger LOGGER = Logger.getLogger(ReportImpl.class);
 
     public ParserImpl() {
         this.xmlParser = new XmlParser();
@@ -26,51 +26,70 @@ public class ParserImpl implements Parser {
      * Method to parse contents of files given by paths.
      *
      * @param filePath         is path to file
-     * @param removeDuplicates true if duplicate orders are to be removed, otherwise false
+     * @param removeDuplicates true if duplicate requests are to be removed,
+     *                         otherwise false
      * @return list with objects extracted from file, otherwise throws exception
      * @throws UnsupportedFileExtensionException when path is not present
      */
     @Override
-    public List<OrderEntity> readDataFromFile(String filePath, boolean removeDuplicates) throws UnsupportedFileExtensionException {
-        List<OrderEntity> ordersEntities = new ArrayList<>();
+    public List<Request> readDataFromFiles(String filePath,
+                                           boolean removeDuplicates) throws UnsupportedFileExtensionException {
+        List<Request> requestsEntities = new ArrayList<>();
         if (filePath != null) {
             if (filePath.toLowerCase().endsWith(".xml")) {
-                ordersEntities = xmlParser.readOrders(filePath, removeDuplicates);
+                requestsEntities = xmlParser.readRequests(filePath,
+                        removeDuplicates);
             } else if (filePath.toLowerCase().endsWith(".csv")) {
-                ordersEntities = csvParser.readOrders(filePath, removeDuplicates);
+                requestsEntities = csvParser.readRequests(filePath,
+                        removeDuplicates);
             }
         } else {
-            logger.error("The file with the given extension is not supported.");
-            throw new UnsupportedFileExtensionException("The file with the given extension is not supported.");
+            LOGGER.error("The file with the given extension is not supported.");
+            throw new UnsupportedFileExtensionException("The file with the "
+                    + "given extension is not supported.");
         }
-        return ordersEntities;
+        return requestsEntities;
     }
 
     /**
      * Method to parse contents of files given by paths.
      *
      * @param filesPaths       are paths to files
-     * @param removeDuplicates true if duplicate orders are to be removed, otherwise false
-     * @return list with objects extracted from files, otherwise throws exceptions
+     * @param removeDuplicates true if duplicate requests are to be removed,
+     *                         otherwise false
+     * @return list with objects extracted from files, otherwise throws
+     * exceptions
      * @throws UnsupportedFileExtensionException when path is not present
      */
     @Override
-    public List<OrderEntity> readDataFromFile(String[] filesPaths, boolean removeDuplicates) throws UnsupportedFileExtensionException {
-        List<OrderEntity> ordersEntities = new ArrayList<>();
-        List<OrderEntity> allOrdersEntities = new ArrayList<>();
-        for (int i = 0; i < filesPaths.length; i++) {
-            if (filesPaths[i] != null) {
-                if (filesPaths[i].toLowerCase().endsWith(".xml")) {
-                    ordersEntities = xmlParser.readOrders(filesPaths[i], removeDuplicates);
-                } else if (filesPaths[i].toLowerCase().endsWith(".csv")) {
-                    ordersEntities = csvParser.readOrders(filesPaths[i], removeDuplicates);
-                }
-            } else {
-                logger.error("The file with the given extension is not supported.");
-                throw new UnsupportedFileExtensionException("The file with the given extension is not supported.");
-            }
-            allOrdersEntities.addAll(ordersEntities);
+    public List<Request> readDataFromFiles(List<String> filesPaths,
+                                           boolean removeDuplicates) throws UnsupportedFileExtensionException {
+        List<Request> requestsEntities = new ArrayList<>();
+        List<Request> allRequestsEntities = new ArrayList<>();
+
+        requestsEntities.addAll(
+                filesPaths.stream().filter(p -> p != null)
+                        .collect(Collectors.toList())
+                        .stream()
+                        .filter(p -> {
+                            return p.endsWith(".xml") || p.endsWith(".csv");
+                        })
+                        .collect(Collectors.toList())
+                        .stream()
+                        .map(p -> prepareRequests(p, removeDuplicates))
+                        .flatMap(List::stream).collect(Collectors.toList())
+        );
+        allRequestsEntities.addAll(requestsEntities);
+        return allRequestsEntities;
+    }
+
+    private List<Request> prepareRequests(String p, boolean removeDuplicates) {
+        List<Request> requests = new ArrayList<>();
+        if (p.endsWith("xml")) {
+            requests.addAll(xmlParser.readRequests(p, removeDuplicates));
+        } else {
+            requests.addAll(csvParser.readRequests(p, removeDuplicates));
         }
-        return allOrdersEntities;
+        return requests;
     }
 }
