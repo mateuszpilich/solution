@@ -1,12 +1,9 @@
 /**
  * Dao contain set of functionalities for queries to database.
- *
- * @version 1.0
  */
 package dao;
 
 import domain.Request;
-import settings.H2JdbcConnection;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -23,7 +20,11 @@ public class DaoRepositoryImpl implements DaoRepository {
     /**
      * This is connection with database.
      */
-    private Connection connection = new H2JdbcConnection().getConnection();
+    private Connection connection;
+
+    public DaoRepositoryImpl(Connection connection) {
+        this.connection = connection;
+    }
 
     /**
      * New statement.
@@ -48,7 +49,7 @@ public class DaoRepositoryImpl implements DaoRepository {
     }
 
     /**
-     * Method to count total number of request.
+     * Method to count total number of requests.
      *
      * @return amount total requests
      * @throws SQLException when query is wrong
@@ -63,7 +64,7 @@ public class DaoRepositoryImpl implements DaoRepository {
     }
 
     /**
-     * Method to count total number of request to client by id.
+     * Method to count total number of requests to client by id.
      *
      * @param clientId is id to client
      * @return amount total requests to client by id
@@ -185,7 +186,7 @@ public class DaoRepositoryImpl implements DaoRepository {
      * @return result set from database
      * @throws SQLException when query is wrong
      */
-    private ResultSet executeQuery(final String query) throws SQLException {
+    protected ResultSet executeQuery(final String query) throws SQLException {
         statement = connection.createStatement();
         return statement.executeQuery(query);
     }
