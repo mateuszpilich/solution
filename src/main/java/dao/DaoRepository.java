@@ -70,7 +70,8 @@ public interface DaoRepository {
      * @return list of all requests to client by id
      * @throws SQLException when query is wrong
      */
-    List<Request> listOfAllRequestsToClientById(Long clientId) throws SQLException;
+    List<Request> listOfAllRequestsToClientById(Long clientId)
+            throws SQLException;
 
     /**
      * Method to count average value of request.
@@ -87,5 +88,6 @@ public interface DaoRepository {
      * @return average value of request to client by id
      * @throws SQLException when query is wrong
      */
-    BigDecimal averageValueOfRequestToClientById(Long clientId) throws SQLException;
+    BigDecimal averageValueOfRequestToClientById(Long clientId)
+            throws SQLException;
 }
