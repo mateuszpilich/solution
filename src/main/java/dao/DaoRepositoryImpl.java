@@ -23,11 +23,42 @@ public class DaoRepositoryImpl implements DaoRepository {
      */
     private Connection connection;
 
+    /**
+     * This is logger.
+     */
     private static final org.apache.log4j.Logger LOGGER =
             org.apache.log4j.Logger.getLogger(ReportImpl.class);
 
-    public DaoRepositoryImpl(Connection connection) {
-        this.connection = connection;
+    /**
+     * This is query for count all requests.
+     */
+    private static final String SELECT_COUNT_ID = "SELECT COUNT(id) FROM "
+            + "REQUEST;";
+
+    /**
+     * This is query for sum of price for all requests.
+     */
+    private static final String SELECT_SUM_PRICE = "SELECT SUM(price) FROM "
+            + "REQUEST;";
+
+    /**
+     * This is query for select all requests.
+     */
+    private static final String SELECT_ALL = "SELECT * FROM REQUEST";
+
+    /**
+     * This is query for select average price for all requests.
+     */
+    private static final String SELECT_AVG_PRICE = "SELECT AVG(price) FROM "
+            + "REQUEST";
+
+    /**
+     * This is constructor DaoRepositoryImpl.
+     *
+     * @param con for connect to database
+     */
+    public DaoRepositoryImpl(final Connection con) {
+        this.connection = con;
     }
 
     /**
@@ -58,16 +89,19 @@ public class DaoRepositoryImpl implements DaoRepository {
      * @return amount total requests
      * @throws SQLException when query is wrong
      */
-    public final Long totalRequestsNumber() throws SQLException {
-        ResultSet resultSet = executeQuery("SELECT COUNT(id) FROM REQUEST;");
-        Long amount = Long.valueOf(0);
+    public final Long totalRequestsNumber() {
+        ResultSet resultSet = null;
+        Long amount = null;
         try {
-            if (resultSet.next()) {
+            resultSet = executeQuery(SELECT_COUNT_ID);
+            if (resultSet != null && resultSet.next()) {
                 amount = resultSet.getLong(1);
             }
-        } catch (NullPointerException e) {
-            LOGGER.info("No requests in database!");
+        } catch (SQLException e) {
+            LOGGER.fatal("Error while executing query!");
         }
+
+
         return amount;
     }
 
@@ -78,18 +112,19 @@ public class DaoRepositoryImpl implements DaoRepository {
      * @return amount total requests to client by id
      * @throws SQLException when query is wrong
      */
-    public final Long totalRequestsNumberByClientId(final Long clientId) throws SQLException {
+    public final Long totalRequestsNumberByClientId(final Long clientId) throws
+            SQLException {
         ResultSet resultSet =
-                executeQuery("SELECT COUNT(id) FROM REQUEST WHERE clientId = "
-                        + String.valueOf(clientId) + ";");
+                executeQuery("SELECT COUNT(id) FROM REQUEST WHERE "
+                        + "clientId = " + String.valueOf(clientId) + ";");
         Long amount = null;
         try {
             if (resultSet.next()) {
                 amount = resultSet.getLong(1);
             }
         } catch (NullPointerException e) {
-            LOGGER.info("No requests for client id: " + clientId + " in " +
-                    "database!");
+            LOGGER.info("No requests for client id: " + clientId + " in "
+                    + "database!");
         }
         return amount;
     }
@@ -101,14 +136,15 @@ public class DaoRepositoryImpl implements DaoRepository {
      * @throws SQLException when query is wrong
      */
     public final BigDecimal totalRequestsPrice() throws SQLException {
-        ResultSet resultSet = executeQuery("SELECT SUM(price) FROM REQUEST;");
+        ResultSet resultSet = null;
         BigDecimal price = null;
         try {
-            if (resultSet.next()) {
+            resultSet = executeQuery(SELECT_SUM_PRICE);
+            if (resultSet != null && resultSet.next()) {
                 price = resultSet.getBigDecimal(1);
             }
-        } catch (NullPointerException e) {
-            LOGGER.info("No requests in database!");
+        } catch (SQLException e) {
+            LOGGER.fatal("Error while executing query!");
         }
         return price.setScale(2, BigDecimal.ROUND_CEILING);
     }
@@ -120,18 +156,19 @@ public class DaoRepositoryImpl implements DaoRepository {
      * @return amount total price for requests to client by id
      * @throws SQLException when query is wrong
      */
-    public final BigDecimal totalRequestsPriceByClientId(final Long clientId) throws SQLException {
+    public final BigDecimal totalRequestsPriceByClientId(
+            final Long clientId) throws SQLException {
         ResultSet resultSet =
-                executeQuery("SELECT SUM(price) FROM REQUEST WHERE clientId = "
-                        + String.valueOf(clientId) + ";");
+                executeQuery("SELECT SUM(price) FROM REQUEST WHERE "
+                        + "clientId = " + String.valueOf(clientId) + ";");
         BigDecimal price = null;
         try {
             if (resultSet.next()) {
                 price = resultSet.getBigDecimal(1);
             }
         } catch (NullPointerException e) {
-            LOGGER.info("No requests for client id: " + clientId + " in " +
-                    "database!");
+            LOGGER.info("No requests for client id: " + clientId + " in "
+                    + "database!");
         }
         return price.setScale(2, BigDecimal.ROUND_CEILING);
     }
@@ -145,8 +182,15 @@ public class DaoRepositoryImpl implements DaoRepository {
     public final List<Request> listOfAllRequests() throws SQLException {
         List<Request> listOfAllRequests = new ArrayList<Request>();
         ResultSet resultSet = executeQuery("SELECT * FROM REQUEST");
-        while (resultSet.next()) {
-            listOfAllRequests.add(prepareRequest(resultSet));
+        try {
+            resultSet = executeQuery(SELECT_ALL);
+            if (resultSet != null && resultSet.next()) {
+                while (resultSet.next()) {
+                    listOfAllRequests.add(prepareRequest(resultSet));
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.fatal("Error while executing query!");
         }
         return listOfAllRequests;
     }
@@ -158,7 +202,8 @@ public class DaoRepositoryImpl implements DaoRepository {
      * @return list of all requests to client by id
      * @throws SQLException when query is wrong
      */
-    public final List<Request> listOfAllRequestsToClientById(final Long clientId) throws SQLException {
+    public final List<Request> listOfAllRequestsToClientById(
+            final Long clientId) throws SQLException {
         List<Request> listOfAllRequestsToClient = new ArrayList<Request>();
         ResultSet resultSet = executeQuery("SELECT * FROM REQUEST WHERE "
                 + "clientId = " + String.valueOf(clientId) + ";");
@@ -175,14 +220,15 @@ public class DaoRepositoryImpl implements DaoRepository {
      * @throws SQLException when query is wrong
      */
     public final BigDecimal averageValueOfRequest() throws SQLException {
-        ResultSet resultSet = executeQuery("SELECT AVG(price) FROM REQUEST");
+        ResultSet resultSet = null;
         BigDecimal price = null;
         try {
-            if (resultSet.next()) {
+            resultSet = executeQuery(SELECT_AVG_PRICE);
+            if (resultSet != null && resultSet.next()) {
                 price = resultSet.getBigDecimal(1);
             }
-        } catch (NullPointerException e) {
-            LOGGER.info("No requests in database!");
+        } catch (SQLException e) {
+            LOGGER.fatal("Error while executing query!");
         }
         return price.setScale(2, BigDecimal.ROUND_CEILING);
     }
@@ -194,9 +240,11 @@ public class DaoRepositoryImpl implements DaoRepository {
      * @return average value of request to client by id
      * @throws SQLException when query is wrong
      */
-    public final BigDecimal averageValueOfRequestToClientById(final Long clientId) throws SQLException {
+    public final BigDecimal averageValueOfRequestToClientById(
+            final Long clientId) throws SQLException {
         ResultSet resultSet =
-                executeQuery("SELECT AVG(price) FROM REQUEST WHERE clientId ="
+                executeQuery("SELECT AVG(price) FROM REQUEST WHERE "
+                        + "clientId ="
                         + String.valueOf(clientId) + ";");
         BigDecimal price = null;
         try {
@@ -204,8 +252,8 @@ public class DaoRepositoryImpl implements DaoRepository {
                 price = resultSet.getBigDecimal(1);
             }
         } catch (NullPointerException e) {
-            LOGGER.info("No requests for client id: " + clientId + " in " +
-                    "database!");
+            LOGGER.info("No requests for client id: " + clientId + " in "
+                    + "database!");
         }
         return price.setScale(2, BigDecimal.ROUND_CEILING);
     }
@@ -217,7 +265,8 @@ public class DaoRepositoryImpl implements DaoRepository {
      * @return result set from database
      * @throws SQLException when query is wrong
      */
-    protected ResultSet executeQuery(final String query) throws SQLException {
+    protected final ResultSet executeQuery(final String query) throws
+            SQLException {
         statement = connection.createStatement();
         return statement.executeQuery(query);
     }
@@ -229,7 +278,8 @@ public class DaoRepositoryImpl implements DaoRepository {
      * @return new request
      * @throws SQLException when query is wrong
      */
-    protected Request prepareRequest(final ResultSet resultSet) throws SQLException {
+    protected final Request prepareRequest(final ResultSet resultSet) throws
+            SQLException {
         Long id = resultSet.getLong("id");
         String clientIdRs = resultSet.getString("clientId");
         Long requestId = resultSet.getLong("requestId");
