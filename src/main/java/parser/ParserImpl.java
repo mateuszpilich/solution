@@ -32,8 +32,8 @@ public class ParserImpl implements Parser {
      * @throws UnsupportedFileExtensionException when path is not present
      */
     @Override
-    public List<Request> readDataFromFiles(String filePath,
-                                           boolean removeDuplicates) throws UnsupportedFileExtensionException {
+    public final List<Request> readDataFromFiles(final String filePath,
+                                                 final boolean removeDuplicates) throws UnsupportedFileExtensionException {
         List<Request> requestsEntities = new ArrayList<>();
         if (filePath != null) {
             if (filePath.toLowerCase().endsWith(".xml")) {
@@ -62,20 +62,13 @@ public class ParserImpl implements Parser {
      * @throws UnsupportedFileExtensionException when path is not present
      */
     @Override
-    public List<Request> readDataFromFiles(List<String> filesPaths,
-                                           boolean removeDuplicates) throws UnsupportedFileExtensionException {
+    public final List<Request> readDataFromFiles(final List<String> filesPaths,
+                                                 final boolean removeDuplicates) throws UnsupportedFileExtensionException {
         List<Request> requestsEntities = new ArrayList<>();
         List<Request> allRequestsEntities = new ArrayList<>();
-
         requestsEntities.addAll(
-                filesPaths.stream().filter(p -> p != null)
-                        .collect(Collectors.toList())
-                        .stream()
-                        .filter(p -> {
-                            return p.endsWith(".xml") || p.endsWith(".csv");
-                        })
-                        .collect(Collectors.toList())
-                        .stream()
+                filesPaths.stream()
+                        .filter(p -> p != null && (p.endsWith(".xml") || p.endsWith(".csv")))
                         .map(p -> prepareRequests(p, removeDuplicates))
                         .flatMap(List::stream).collect(Collectors.toList())
         );
@@ -83,7 +76,8 @@ public class ParserImpl implements Parser {
         return allRequestsEntities;
     }
 
-    private List<Request> prepareRequests(String p, boolean removeDuplicates) {
+    private List<Request> prepareRequests(final String p,
+                                          final boolean removeDuplicates) {
         List<Request> requests = new ArrayList<>();
         if (p.endsWith("xml")) {
             requests.addAll(xmlParser.readRequests(p, removeDuplicates));
