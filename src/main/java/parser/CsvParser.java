@@ -83,9 +83,9 @@ public class CsvParser {
                                             final boolean removeDuplicates) {
         try (Stream<String> stream = Files.lines(Paths.get(filePath),
                 StandardCharsets.UTF_8)) {
-            stream.forEach(request -> {
+            stream.forEach(rRequest -> {
                 try {
-                    requestsEntities.add(createRequest(request));
+                    requestsEntities.add(createRequest(rRequest));
                 } catch (NumberFormatException e) {
                     LOGGER.error(e.getMessage());
                 } catch (WrongInputDataException e) {
@@ -112,22 +112,24 @@ public class CsvParser {
      * @return new request entity
      * @throws WrongInputDataException incorrect request data
      */
-    private Request createRequest(final String requestFromFile) throws WrongInputDataException {
-        String[] request = requestFromFile.split(",");
+    private Request createRequest(final String requestFromFile)
+            throws WrongInputDataException {
+        String[] rRequest = requestFromFile.split(",");
         Request requestEntity;
         try {
             Long id = null;
-            String clientId = request[INDEX_FOR_CLIENT_ID];
-            Long requestId = Long.parseLong(request[INDEX_FOR_REQUEST_ID]);
-            String name = request[INDEX_FOR_NAME];
-            Integer quantity = Integer.parseInt(request[INDEX_FOR_QUANTITY]);
+            String clientId = rRequest[INDEX_FOR_CLIENT_ID];
+            Long requestId = Long.parseLong(rRequest[INDEX_FOR_REQUEST_ID]);
+            String name = rRequest[INDEX_FOR_NAME];
+            Integer quantity = Integer.parseInt(rRequest[INDEX_FOR_QUANTITY]);
             BigDecimal price =
-                    BigDecimal.valueOf(Double.parseDouble(request[INDEX_FOR_PRICE]));
+                    BigDecimal.valueOf(Double.parseDouble(
+                            rRequest[INDEX_FOR_PRICE]));
             requestEntity = new Request(id, clientId, requestId, name,
                     quantity, price);
         } catch (Exception e) {
-            LOGGER.error("Incorrect request data!");
-            throw new WrongInputDataException("Incorrect request data!");
+            LOGGER.error("Incorrect rRequest data!");
+            throw new WrongInputDataException("Incorrect rRequest data!");
         }
         return requestEntity;
     }
