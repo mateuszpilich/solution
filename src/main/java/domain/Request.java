@@ -2,76 +2,210 @@ package domain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * The class helps represents request.
  */
 public class Request implements Serializable {
 
+    /**
+     * This is id for request.
+     */
     private Long id;
+
+    /**
+     * This is id for client.
+     */
     private String clientId;
+
+    /**
+     * This is request id.
+     */
     private Long requestId;
+
+    /**
+     * This is name of request.
+     */
     private String name;
+
+    /**
+     * This is quantity for request.
+     */
     private Integer quantity;
+
+    /**
+     * This is price for request.
+     */
     private BigDecimal price;
 
+    /**
+     * This is empty constructor for request.
+     */
     public Request() {
     }
 
-    public Request(Long id, String clientId, Long requestId, String name, Integer quantity, BigDecimal price) {
-        this.id = id;
-        this.clientId = clientId.replaceAll(" ","");
-        this.requestId = requestId;
-        this.name = name;
-        this.quantity = quantity;
-        this.price = price;
+    /**
+     * This is construcotor for request.
+     *
+     * @param rId        is rId for request
+     * @param rClientId  is client rId for request
+     * @param rRequestId is request rId
+     * @param rName      is rName for request
+     * @param rQuantity  is rQuantity for request
+     * @param rPrice     is rPrice for request
+     */
+    public Request(final Long rId, final String rClientId,
+                   final Long rRequestId,
+                   final String rName,
+                   final Integer rQuantity, final BigDecimal rPrice) {
+        this.id = rId;
+        this.clientId = rClientId.replaceAll(" ", "");
+        this.requestId = rRequestId;
+        this.name = rName;
+        this.quantity = rQuantity;
+        this.price = rPrice;
     }
 
-    public Long getId() {
+    /**
+     * This is getter for id for request.
+     *
+     * @return is id for request
+     */
+    public final Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    /**
+     * This is setter for rId for request.
+     *
+     * @param rId is rId for request
+     */
+    public final void setId(final Long rId) {
+        this.id = rId;
     }
 
-    public String getClientId() {
+    /**
+     * This is getter for client id for request.
+     *
+     * @return is client id for request
+     */
+    public final String getClientId() {
         return clientId;
     }
 
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
+    /**
+     * This is setter for client id for request.
+     *
+     * @param rClientId is client for request
+     */
+    public final void setClientId(final String rClientId) {
+        this.clientId = rClientId;
     }
 
-    public Long getRequestId() {
+    /**
+     * This is getter for request id for request.
+     *
+     * @return is request id for request
+     */
+    public final Long getRequestId() {
         return requestId;
     }
 
-    public void setRequestId(Long requestId) {
-        this.requestId = requestId;
+    /**
+     * This is setter for request id for request.
+     *
+     * @param rRequestId is request id for request
+     */
+    public final void setRequestId(final Long rRequestId) {
+        this.requestId = rRequestId;
     }
 
-    public String getName() {
+    /**
+     * This is getter for request name for request.
+     *
+     * @return is request name for request
+     */
+    public final String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    /**
+     * This is setter for request name for request.
+     *
+     * @param rName is request name for request.
+     */
+    public final void setName(final String rName) {
+        this.name = rName;
     }
 
-    public Integer getQuantity() {
+    /**
+     * This is getter for quantity for request.
+     *
+     * @return is quantity for request
+     */
+    public final Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
+    /**
+     * This is setter for rQuantity for request.
+     *
+     * @param rQuantity is rQuantity for request
+     */
+    public final void setQuantity(final Integer rQuantity) {
+        this.quantity = rQuantity;
     }
 
-    public BigDecimal getPrice() {
+    /**
+     * This is getter for price for request.
+     *
+     * @return is price for request
+     */
+    public final BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    /**
+     * This is setter for rPrice for request.
+     *
+     * @param rPrice is rPrice for request
+     */
+    public final void setPrice(final BigDecimal rPrice) {
+        this.price = rPrice;
+    }
+
+    @Override
+    public final boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Request request = (Request) o;
+        return Objects.equals(id, request.id)
+                && Objects.equals(clientId, request.clientId)
+                && Objects.equals(requestId, request.requestId)
+                && Objects.equals(name, request.name)
+                && Objects.equals(quantity, request.quantity)
+                && Objects.equals(price, request.price);
+    }
+
+    @Override
+    public final int hashCode() {
+        return Objects.hash(id, clientId, requestId, name, quantity, price);
+    }
+
+    @Override
+    public final String toString() {
+        return "Request{"
+                + "id=" + id
+                + ", clientId='" + clientId + '\''
+                + ", requestId=" + requestId
+                + ", name='" + name + '\''
+                + ", quantity=" + quantity
+                + ", price=" + price
+                + '}';
     }
 }
