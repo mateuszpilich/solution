@@ -11,7 +11,6 @@ import service.ReportImpl;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -44,14 +43,10 @@ public class XmlParser {
             String xml = inputStreamToString(new FileInputStream(file));
             Requests requests = xmlMapper.readValue(xml, Requests.class);
             requestsEntities.addAll(requests.getRequestsEntities());
-        } catch (JsonMappingException e) {
-            LOGGER.error("Incorrect request data!");
-        } catch (JsonParseException e) {
-            LOGGER.error("Incorrect request data!");
-        } catch (FileNotFoundException e) {
+        } catch (JsonMappingException | JsonParseException e) {
             LOGGER.error("Incorrect request data!");
         } catch (IOException e) {
-            LOGGER.error("Incorrect request data!");
+            LOGGER.error("Input data are incorrect!");
         }
         if (removeDuplicates) {
             requestsEntitiesWithoutDuplicates =
@@ -67,7 +62,7 @@ public class XmlParser {
      *
      * @param inputStream next byte of data from the input stream
      * @return all bytes of data
-     * @throws IOException
+     * @throws IOException when data on input or output are incorrect
      */
     private static String inputStreamToString(InputStream inputStream) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
