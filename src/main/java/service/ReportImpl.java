@@ -87,7 +87,8 @@ public class ReportImpl {
                         + request.getRequestId() + ","
                         + request.getName() + ","
                         + request.getQuantity() + ","
-                        + request.getPrice().setScale(2, BigDecimal.ROUND_CEILING)));
+                        + request.getPrice().setScale(2,
+                        BigDecimal.ROUND_CEILING)));
         xmlWriter.writeReportsToXmlFile("listOfAllRequests",
                 new ListOfAllRequests(requestsEntities));
     }
@@ -110,7 +111,8 @@ public class ReportImpl {
                         + request.getRequestId() + ","
                         + request.getName() + ","
                         + request.getQuantity() + ","
-                        + request.getPrice().setScale(2, BigDecimal.ROUND_CEILING)));
+                        + request.getPrice().setScale(2,
+                        BigDecimal.ROUND_CEILING)));
         xmlWriter.writeReportsToXmlFile("listOfAllRequestsToClientById",
                 new ListOfAllRequestsToClientById(clientId,
                         requestsEntities));
