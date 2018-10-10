@@ -23,8 +23,20 @@ import java.util.Set;
  * The class helps read data from xml files.
  */
 public class XmlParser {
+
+    /**
+     * This is list of requests.
+     */
     private List<Request> requestsEntities = new ArrayList<>();
+
+    /**
+     * This is list of requests without duplicates.
+     */
     private Set<Request> requestsEntitiesWithoutDuplicates = new HashSet<>();
+
+    /**
+     * This is logger.
+     */
     private static final Logger LOGGER = Logger.getLogger(ReportImpl.class);
 
     /**
@@ -35,8 +47,8 @@ public class XmlParser {
      *                         otherwise false
      * @return list with objects extracted from file, otherwise throws exception
      */
-    public List<Request> readRequests(String filePath,
-                                      boolean removeDuplicates) {
+    public final List<Request> readRequests(final String filePath,
+                                            final boolean removeDuplicates) {
         try {
             File file = new File(filePath);
             XmlMapper xmlMapper = new XmlMapper();
@@ -64,7 +76,8 @@ public class XmlParser {
      * @return all bytes of data
      * @throws IOException when data on input or output are incorrect
      */
-    private static String inputStreamToString(InputStream inputStream) throws IOException {
+    private static String inputStreamToString(final InputStream inputStream)
+            throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
         String line;
         BufferedReader bufferedReader =
