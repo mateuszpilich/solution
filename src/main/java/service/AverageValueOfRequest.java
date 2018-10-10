@@ -3,7 +3,7 @@ package service;
 import java.math.BigDecimal;
 
 /**
- * The class helps represents reports in xml for average value of request.
+ * The class helps represents reports in xml file for average value of request.
  */
 public class AverageValueOfRequest {
 
