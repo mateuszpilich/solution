@@ -7,18 +7,34 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * The class helps save list of request to xml reports.
+ */
 public class Requests implements Serializable {
 
+    /**
+     * This is list of reuests.
+     */
     @JacksonXmlProperty(localName = "request")
     @JacksonXmlCData
     @JacksonXmlElementWrapper(useWrapping = false)
     private List<Request> requestsEntities;
 
-    public List<Request> getRequestsEntities() {
+    /**
+     * This is getter for list of requests.
+     *
+     * @return is list of requests
+     */
+    public final List<Request> getRequestsEntities() {
         return requestsEntities;
     }
 
-    public void setRequestsEntities(List<Request> requestsEntities) {
-        this.requestsEntities = requestsEntities;
+    /**
+     * This is setter for list of requests.
+     *
+     * @param rReqEntities is list of requests
+     */
+    public final void setRequestsEntities(final List<Request> rReqEntities) {
+        this.requestsEntities = rReqEntities;
     }
 }
