@@ -1,7 +1,7 @@
 package service;
 
 /**
- * This class helps represent reports in xml file for total requests number
+ * This class helps represents reports in xml file for total requests number
  * to client by id.
  */
 public class TotalRequestsNumberToClientById {
