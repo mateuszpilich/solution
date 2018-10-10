@@ -1,7 +1,7 @@
 package service;
 
 /**
- * The class helps represent reports in xml file for total number of requests.
+ * The class helps represents reports in xml file for total number of requests.
  */
 public class TotalNumberOfRequests {
     /**
