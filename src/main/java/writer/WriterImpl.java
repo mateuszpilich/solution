@@ -18,7 +18,7 @@ public class WriterImpl implements Writer {
 
     @Override
     public final void writeReportsToFile(final String xmlFileName,
-                                        final Object reportClass) {
+                                         final Object reportClass) {
         xmlWriter.writeReportsToXmlFile(xmlFileName, reportClass);
     }
 }
