@@ -18,9 +18,15 @@ import java.util.List;
 /**
  * The main class of the program.
  */
-public class Main {
+public final class Main {
     /**
-     * This is parser .
+     * This is constructor.
+     */
+    private Main() {
+    }
+
+    /**
+     * This is parser.
      */
     private static final Parser PARSER = new ParserImpl();
 
@@ -29,9 +35,6 @@ public class Main {
      */
     private static final DaoRepository DAO_REPOSITORY =
             new DaoRepositoryImpl(new H2JdbcConnection().getConnection());
-
-    private static final List<String> FILES_PATHS = Arrays.asList("C" +
-            "://requests.csv", "C://requests.xml");
 
     /**
      * This is logger.
@@ -49,9 +52,9 @@ public class Main {
      * @param args are files paths
      */
     public static void main(final String[] args) {
-        //List<String> filesPaths = Arrays.asList(args);
+        List<String> filesPaths = Arrays.asList(args);
         try {
-            newRequestsEntities = PARSER.readDataFromFiles(FILES_PATHS, true);
+            newRequestsEntities = PARSER.readDataFromFiles(filesPaths, true);
         } catch (UnsupportedFileExtensionException e) {
             LOGGER.error(e.getMessage());
         }
