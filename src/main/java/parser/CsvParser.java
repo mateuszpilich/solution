@@ -1,8 +1,3 @@
-/**
- * Parser contain tools for parse data files to POJO.
- *
- * @version 1.0
- */
 package parser;
 
 import domain.Request;
