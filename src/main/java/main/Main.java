@@ -19,15 +19,36 @@ import java.util.List;
  * The main class of the program.
  */
 public class Main {
+    /**
+     * This is parser .
+     */
     private static final Parser PARSER = new ParserImpl();
+
+    /**
+     * This is dao repository.
+     */
     private static final DaoRepository DAO_REPOSITORY =
             new DaoRepositoryImpl(new H2JdbcConnection().getConnection());
+
     private static final List<String> FILES_PATHS = Arrays.asList("C" +
             "://requests.csv", "C://requests.xml");
+
+    /**
+     * This is logger.
+     */
     private static final Logger LOGGER = Logger.getLogger(ReportImpl.class);
+
+    /**
+     * This is list of new requests.
+     */
     private static List<Request> newRequestsEntities = new ArrayList<Request>();
 
-    public static void main(String[] args) {
+    /**
+     * This is main method of program.
+     *
+     * @param args are files paths
+     */
+    public static void main(final String[] args) {
         //List<String> filesPaths = Arrays.asList(args);
         try {
             newRequestsEntities = PARSER.readDataFromFiles(FILES_PATHS, true);
