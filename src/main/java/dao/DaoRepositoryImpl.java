@@ -5,6 +5,7 @@ import service.ReportImpl;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -33,10 +34,22 @@ public class DaoRepositoryImpl implements DaoRepository {
             + "request;";
 
     /**
+     * This is query for count all requests to client by id.
+     */
+    private static final String SELECT_COUNT_BY_CLIENT_ID = "SELECT COUNT(id)"
+            + " FROM request WHERE client_id = ?";
+
+    /**
      * This is query for sum of price for all requests.
      */
     private static final String SELECT_SUM_PRICE = "SELECT SUM(price) FROM "
             + "request;";
+
+    /**
+     * This is query for sum of price for all requests by client id.
+     */
+    private static final String SELECT_SUM_PRICE_BY_CLIENT_ID = "SELECT SUM"
+            + "(price) FROM request WHERE client_id = ?";
 
     /**
      * This is query for select all requests.
@@ -44,10 +57,22 @@ public class DaoRepositoryImpl implements DaoRepository {
     private static final String SELECT_ALL = "SELECT * FROM request";
 
     /**
+     * This is query for select all requests by client id.
+     */
+    private static final String SELECT_ALL_BY_CLIENT_ID = "SELECT * FROM "
+            + "request WHERE client_id = ?";
+
+    /**
      * This is query for select average price for all requests.
      */
     private static final String SELECT_AVG_PRICE = "SELECT AVG(price) FROM "
             + "request";
+
+    /**
+     * This is query for select average price for all requests by client id.
+     */
+    private static final String SELECT_AVG_PRICE_BY_CLIENT_ID = "SELECT AVG"
+            + "(price) FROM request WHERE client_id = ?";
 
     /**
      * This is constructor DaoRepositoryImpl.
@@ -111,9 +136,9 @@ public class DaoRepositoryImpl implements DaoRepository {
      */
     public final Long totalRequestsNumberByClientId(final Long clientId) throws
             SQLException {
-        ResultSet resultSet =
-                executeQuery("SELECT COUNT(id) FROM request WHERE "
-                        + "client_id = " + String.valueOf(clientId) + ";");
+        Statement stmt = connection.prepareStatement(SELECT_COUNT_BY_CLIENT_ID);
+        ((PreparedStatement) stmt).setLong(1, clientId);
+        ResultSet resultSet = ((PreparedStatement) stmt).executeQuery();
         Long amount = null;
         try {
             if (resultSet.next()) {
@@ -155,9 +180,11 @@ public class DaoRepositoryImpl implements DaoRepository {
      */
     public final BigDecimal totalRequestsPriceByClientId(
             final Long clientId) throws SQLException {
+        Statement stmt =
+                connection.prepareStatement(SELECT_SUM_PRICE_BY_CLIENT_ID);
+        ((PreparedStatement) stmt).setLong(1, clientId);
         ResultSet resultSet =
-                executeQuery("SELECT SUM(price) FROM request WHERE "
-                        + "client_id = " + String.valueOf(clientId) + ";");
+                ((PreparedStatement) stmt).executeQuery();
         BigDecimal price = null;
         try {
             if (resultSet.next()) {
@@ -178,7 +205,7 @@ public class DaoRepositoryImpl implements DaoRepository {
      */
     public final List<Request> listOfAllRequests() throws SQLException {
         List<Request> listOfAllRequests = new ArrayList<Request>();
-        ResultSet resultSet = executeQuery("SELECT * FROM REQUEST");
+        ResultSet resultSet = null;
         try {
             resultSet = executeQuery(SELECT_ALL);
             if (resultSet != null && resultSet.next()) {
@@ -202,8 +229,9 @@ public class DaoRepositoryImpl implements DaoRepository {
     public final List<Request> listOfAllRequestsToClientById(
             final Long clientId) throws SQLException {
         List<Request> listOfAllRequestsToClient = new ArrayList<Request>();
-        ResultSet resultSet = executeQuery("SELECT * FROM request WHERE "
-                + "client_id = " + String.valueOf(clientId) + ";");
+        Statement stmt = connection.prepareStatement(SELECT_ALL_BY_CLIENT_ID);
+        ((PreparedStatement) stmt).setLong(1, clientId);
+        ResultSet resultSet = ((PreparedStatement) stmt).executeQuery();
         while (resultSet.next()) {
             listOfAllRequestsToClient.add(prepareRequest(resultSet));
         }
@@ -239,10 +267,11 @@ public class DaoRepositoryImpl implements DaoRepository {
      */
     public final BigDecimal averageValueOfRequestToClientById(
             final Long clientId) throws SQLException {
+        Statement stmt =
+                connection.prepareStatement(SELECT_AVG_PRICE_BY_CLIENT_ID);
+        ((PreparedStatement) stmt).setLong(1, clientId);
         ResultSet resultSet =
-                executeQuery("SELECT AVG(price) FROM request WHERE "
-                        + "client_id ="
-                        + String.valueOf(clientId) + ";");
+                ((PreparedStatement) stmt).executeQuery();
         BigDecimal price = null;
         try {
             if (resultSet.next()) {
