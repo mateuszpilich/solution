@@ -122,8 +122,6 @@ public class DaoRepositoryImpl implements DaoRepository {
         } catch (SQLException e) {
             LOGGER.fatal("Error while executing query!");
         }
-
-
         return amount;
     }
 
@@ -164,6 +162,9 @@ public class DaoRepositoryImpl implements DaoRepository {
             resultSet = executeQuery(SELECT_SUM_PRICE);
             if (resultSet != null && resultSet.next()) {
                 price = resultSet.getBigDecimal(1);
+                if (price == null) {
+                    price = BigDecimal.ZERO;
+                }
             }
         } catch (SQLException e) {
             LOGGER.fatal("Error while executing query!");
@@ -189,6 +190,9 @@ public class DaoRepositoryImpl implements DaoRepository {
         try {
             if (resultSet.next()) {
                 price = resultSet.getBigDecimal(1);
+                if (price == null) {
+                    price = BigDecimal.ZERO;
+                }
             }
         } catch (NullPointerException e) {
             LOGGER.info("No requests for client id: " + clientId + " in "
@@ -251,6 +255,9 @@ public class DaoRepositoryImpl implements DaoRepository {
             resultSet = executeQuery(SELECT_AVG_PRICE);
             if (resultSet != null && resultSet.next()) {
                 price = resultSet.getBigDecimal(1);
+                if (price == null) {
+                    price = BigDecimal.ZERO;
+                }
             }
         } catch (SQLException e) {
             LOGGER.fatal("Error while executing query!");
@@ -276,6 +283,9 @@ public class DaoRepositoryImpl implements DaoRepository {
         try {
             if (resultSet.next()) {
                 price = resultSet.getBigDecimal(1);
+                if (price == null) {
+                    price = BigDecimal.ZERO;
+                }
             }
         } catch (NullPointerException e) {
             LOGGER.info("No requests for client id: " + clientId + " in "
