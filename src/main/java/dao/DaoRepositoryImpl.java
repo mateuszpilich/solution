@@ -1,6 +1,3 @@
-/**
- * Dao contain set of functionalities for queries to database.
- */
 package dao;
 
 import domain.Request;
@@ -33,24 +30,24 @@ public class DaoRepositoryImpl implements DaoRepository {
      * This is query for count all requests.
      */
     private static final String SELECT_COUNT_ID = "SELECT COUNT(id) FROM "
-            + "REQUEST;";
+            + "request;";
 
     /**
      * This is query for sum of price for all requests.
      */
     private static final String SELECT_SUM_PRICE = "SELECT SUM(price) FROM "
-            + "REQUEST;";
+            + "request;";
 
     /**
      * This is query for select all requests.
      */
-    private static final String SELECT_ALL = "SELECT * FROM REQUEST";
+    private static final String SELECT_ALL = "SELECT * FROM request";
 
     /**
      * This is query for select average price for all requests.
      */
     private static final String SELECT_AVG_PRICE = "SELECT AVG(price) FROM "
-            + "REQUEST";
+            + "request";
 
     /**
      * This is constructor DaoRepositoryImpl.
@@ -74,7 +71,7 @@ public class DaoRepositoryImpl implements DaoRepository {
      */
     public final void addNewRequest(final Request request) throws SQLException {
         statement = connection.createStatement();
-        statement.executeUpdate("insert into REQUEST (clientId,requestId,"
+        statement.executeUpdate("insert into request (client_id,request_id,"
                 + "name,quantity,price) values('"
                 + request.getClientId() + "',"
                 + request.getRequestId() + ",'"
@@ -115,8 +112,8 @@ public class DaoRepositoryImpl implements DaoRepository {
     public final Long totalRequestsNumberByClientId(final Long clientId) throws
             SQLException {
         ResultSet resultSet =
-                executeQuery("SELECT COUNT(id) FROM REQUEST WHERE "
-                        + "clientId = " + String.valueOf(clientId) + ";");
+                executeQuery("SELECT COUNT(id) FROM request WHERE "
+                        + "client_id = " + String.valueOf(clientId) + ";");
         Long amount = null;
         try {
             if (resultSet.next()) {
@@ -159,8 +156,8 @@ public class DaoRepositoryImpl implements DaoRepository {
     public final BigDecimal totalRequestsPriceByClientId(
             final Long clientId) throws SQLException {
         ResultSet resultSet =
-                executeQuery("SELECT SUM(price) FROM REQUEST WHERE "
-                        + "clientId = " + String.valueOf(clientId) + ";");
+                executeQuery("SELECT SUM(price) FROM request WHERE "
+                        + "client_id = " + String.valueOf(clientId) + ";");
         BigDecimal price = null;
         try {
             if (resultSet.next()) {
@@ -205,8 +202,8 @@ public class DaoRepositoryImpl implements DaoRepository {
     public final List<Request> listOfAllRequestsToClientById(
             final Long clientId) throws SQLException {
         List<Request> listOfAllRequestsToClient = new ArrayList<Request>();
-        ResultSet resultSet = executeQuery("SELECT * FROM REQUEST WHERE "
-                + "clientId = " + String.valueOf(clientId) + ";");
+        ResultSet resultSet = executeQuery("SELECT * FROM request WHERE "
+                + "client_id = " + String.valueOf(clientId) + ";");
         while (resultSet.next()) {
             listOfAllRequestsToClient.add(prepareRequest(resultSet));
         }
@@ -243,8 +240,8 @@ public class DaoRepositoryImpl implements DaoRepository {
     public final BigDecimal averageValueOfRequestToClientById(
             final Long clientId) throws SQLException {
         ResultSet resultSet =
-                executeQuery("SELECT AVG(price) FROM REQUEST WHERE "
-                        + "clientId ="
+                executeQuery("SELECT AVG(price) FROM request WHERE "
+                        + "client_id ="
                         + String.valueOf(clientId) + ";");
         BigDecimal price = null;
         try {
@@ -281,8 +278,8 @@ public class DaoRepositoryImpl implements DaoRepository {
     protected final Request prepareRequest(final ResultSet resultSet) throws
             SQLException {
         Long id = resultSet.getLong("id");
-        String clientIdRs = resultSet.getString("clientId");
-        Long requestId = resultSet.getLong("requestId");
+        String clientIdRs = resultSet.getString("client_id");
+        Long requestId = resultSet.getLong("request_id");
         String name = resultSet.getString("name");
         Integer quantity = resultSet.getInt("quantity");
         BigDecimal price = resultSet.getBigDecimal("price");
