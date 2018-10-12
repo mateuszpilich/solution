@@ -7,6 +7,7 @@ public class UnsupportedFileExtensionException extends Exception {
 
     /**
      * This is constructor unsupported file extension exception.
+     *
      * @param message is message for user
      */
     public UnsupportedFileExtensionException(final String message) {
