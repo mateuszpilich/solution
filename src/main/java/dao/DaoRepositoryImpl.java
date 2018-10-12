@@ -132,20 +132,21 @@ public class DaoRepositoryImpl implements DaoRepository {
      * @return amount total requests to client by id
      * @throws SQLException when query is wrong
      */
-    public final Long totalRequestsNumberByClientId(final Long clientId) throws
-            SQLException {
-        PreparedStatement stmt =
-                connection.prepareStatement(SELECT_COUNT_BY_CLIENT_ID);
-        stmt.setLong(1, clientId);
-        ResultSet resultSet = stmt.executeQuery();
+    public final Long totalRequestsNumberByClientId(final Long clientId) {
         Long amount = null;
         try {
+            PreparedStatement stmt =
+                    connection.prepareStatement(SELECT_COUNT_BY_CLIENT_ID);
+            stmt.setLong(1, clientId);
+            ResultSet resultSet = stmt.executeQuery();
             if (resultSet.next()) {
                 amount = resultSet.getLong(1);
+            } else if (resultSet == null) {
+                LOGGER.info("No requests for client id: " + clientId + " in "
+                        + "database!");
             }
-        } catch (NullPointerException e) {
-            LOGGER.info("No requests for client id: " + clientId + " in "
-                    + "database!");
+        } catch (SQLException e) {
+            LOGGER.fatal("Error while executing query!");
         }
         return amount;
     }
@@ -163,12 +164,12 @@ public class DaoRepositoryImpl implements DaoRepository {
             resultSet = executeQuery(SELECT_SUM_PRICE);
             if (resultSet != null && resultSet.next()) {
                 price = resultSet.getBigDecimal(1);
-                if (price == null) {
-                    price = BigDecimal.ZERO;
-                }
             }
         } catch (SQLException e) {
             LOGGER.fatal("Error while executing query!");
+        }
+        if (price == null) {
+            price = BigDecimal.ZERO;
         }
         return price.setScale(2, BigDecimal.ROUND_CEILING);
     }
@@ -181,22 +182,24 @@ public class DaoRepositoryImpl implements DaoRepository {
      * @throws SQLException when query is wrong
      */
     public final BigDecimal totalRequestsPriceByClientId(
-            final Long clientId) throws SQLException {
-        PreparedStatement stmt =
-                connection.prepareStatement(SELECT_SUM_PRICE_BY_CLIENT_ID);
-        stmt.setLong(1, clientId);
-        ResultSet resultSet = stmt.executeQuery();
+            final Long clientId) {
         BigDecimal price = null;
         try {
+            PreparedStatement stmt =
+                    connection.prepareStatement(SELECT_SUM_PRICE_BY_CLIENT_ID);
+            stmt.setLong(1, clientId);
+            ResultSet resultSet = stmt.executeQuery();
             if (resultSet.next()) {
                 price = resultSet.getBigDecimal(1);
-                if (price == null) {
-                    price = BigDecimal.ZERO;
-                }
+            } else if (resultSet == null) {
+                LOGGER.info("No requests for client id: " + clientId + " in "
+                        + "database!");
             }
-        } catch (NullPointerException e) {
-            LOGGER.info("No requests for client id: " + clientId + " in "
-                    + "database!");
+        } catch (SQLException e) {
+            LOGGER.fatal("Error while executing query!");
+        }
+        if (price == null) {
+            price = BigDecimal.ZERO;
         }
         return price.setScale(2, BigDecimal.ROUND_CEILING);
     }
@@ -207,7 +210,7 @@ public class DaoRepositoryImpl implements DaoRepository {
      * @return list of all requests
      * @throws SQLException when query is wrong
      */
-    public final List<Request> listOfAllRequests() throws SQLException {
+    public final List<Request> listOfAllRequests() {
         List<Request> listOfAllRequests = new ArrayList<Request>();
         ResultSet resultSet = null;
         try {
@@ -233,12 +236,16 @@ public class DaoRepositoryImpl implements DaoRepository {
     public final List<Request> listOfAllRequestsToClientById(
             final Long clientId) throws SQLException {
         List<Request> listOfAllRequestsToClient = new ArrayList<Request>();
-        PreparedStatement stmt =
-                connection.prepareStatement(SELECT_ALL_BY_CLIENT_ID);
-        stmt.setLong(1, clientId);
-        ResultSet resultSet = stmt.executeQuery();
-        while (resultSet.next()) {
-            listOfAllRequestsToClient.add(prepareRequest(resultSet));
+        try {
+            PreparedStatement stmt =
+                    connection.prepareStatement(SELECT_ALL_BY_CLIENT_ID);
+            stmt.setLong(1, clientId);
+            ResultSet resultSet = stmt.executeQuery();
+            while (resultSet.next()) {
+                listOfAllRequestsToClient.add(prepareRequest(resultSet));
+            }
+        } catch (SQLException e) {
+            LOGGER.fatal("Error while executing query!");
         }
         return listOfAllRequestsToClient;
     }
@@ -256,12 +263,12 @@ public class DaoRepositoryImpl implements DaoRepository {
             resultSet = executeQuery(SELECT_AVG_PRICE);
             if (resultSet != null && resultSet.next()) {
                 price = resultSet.getBigDecimal(1);
-                if (price == null) {
-                    price = BigDecimal.ZERO;
-                }
             }
         } catch (SQLException e) {
             LOGGER.fatal("Error while executing query!");
+        }
+        if (price == null) {
+            price = BigDecimal.ZERO;
         }
         return price.setScale(2, BigDecimal.ROUND_CEILING);
     }
@@ -274,22 +281,24 @@ public class DaoRepositoryImpl implements DaoRepository {
      * @throws SQLException when query is wrong
      */
     public final BigDecimal averageValueOfRequestToClientById(
-            final Long clientId) throws SQLException {
-        PreparedStatement stmt =
-                connection.prepareStatement(SELECT_AVG_PRICE_BY_CLIENT_ID);
-        stmt.setLong(1, clientId);
-        ResultSet resultSet = stmt.executeQuery();
+            final Long clientId) {
         BigDecimal price = null;
         try {
+            PreparedStatement stmt =
+                    connection.prepareStatement(SELECT_AVG_PRICE_BY_CLIENT_ID);
+            stmt.setLong(1, clientId);
+            ResultSet resultSet = stmt.executeQuery();
             if (resultSet.next()) {
                 price = resultSet.getBigDecimal(1);
-                if (price == null) {
-                    price = BigDecimal.ZERO;
-                }
+            } else if (resultSet == null) {
+                LOGGER.info("No requests for client id: " + clientId + " in "
+                        + "database!");
             }
-        } catch (NullPointerException e) {
-            LOGGER.info("No requests for client id: " + clientId + " in "
-                    + "database!");
+        } catch (SQLException e) {
+            LOGGER.fatal("Error while executing query!");
+        }
+        if (price == null) {
+            price = BigDecimal.ZERO;
         }
         return price.setScale(2, BigDecimal.ROUND_CEILING);
     }
