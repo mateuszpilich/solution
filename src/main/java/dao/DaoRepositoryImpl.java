@@ -212,7 +212,7 @@ public class DaoRepositoryImpl implements DaoRepository {
         ResultSet resultSet = null;
         try {
             resultSet = executeQuery(SELECT_ALL);
-            if (resultSet != null && resultSet.next()) {
+            if (resultSet != null) {
                 while (resultSet.next()) {
                     listOfAllRequests.add(prepareRequest(resultSet));
                 }
